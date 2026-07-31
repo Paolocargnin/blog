@@ -12,6 +12,8 @@ install`.
 - `pnpm format` — check formatting.
 - `pnpm type-check` — run strict Astro and TypeScript checks.
 - `pnpm test` — run representative automated tests.
-- `pnpm content:check` — validate the current public-content baseline.
-- `pnpm build` — create a production build.
+- `pnpm content:check` — validate public Posts and the local Workspace when it
+  is present.
+- `pnpm content:check:public` — validate only public Posts, as production does.
+- `pnpm build` — validate and create a production build from public Posts only.
 - `pnpm quality` — run all required checks.
