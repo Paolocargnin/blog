@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Develop"
+  short_description: "Develop a Note into a Draft"
+  default_prompt: "Use $blog-develop to turn this Note into an article Draft."
+policy:
+  allow_implicit_invocation: false

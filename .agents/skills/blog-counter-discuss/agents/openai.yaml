@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Counter Discuss"
+  short_description: "Challenge and resolve article findings"
+  default_prompt: "Use $blog-counter-discuss to challenge this Publication candidate and resolve every finding."
+policy:
+  allow_implicit_invocation: false

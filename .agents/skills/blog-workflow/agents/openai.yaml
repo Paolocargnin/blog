@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Workflow"
+  short_description: "Choose the next editorial skill"
+  default_prompt: "Use $blog-workflow to inspect an article and tell me the next editorial step."
+policy:
+  allow_implicit_invocation: false

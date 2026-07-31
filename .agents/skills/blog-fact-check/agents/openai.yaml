@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Fact Check"
+  short_description: "Independently verify article claims"
+  default_prompt: "Use $blog-fact-check to independently verify this Publication candidate."
+policy:
+  allow_implicit_invocation: false

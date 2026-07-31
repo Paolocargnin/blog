@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Package"
+  short_description: "Package a candidate for publication"
+  default_prompt: "Use $blog-package to complete the publication evidence and public Sources proposal."
+policy:
+  allow_implicit_invocation: false
