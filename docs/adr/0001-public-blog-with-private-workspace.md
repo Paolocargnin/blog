@@ -1,0 +1,3 @@
+# Keep the blog public and version the writing workspace privately
+
+The Astro project and published Posts are committed to a public repository. Unpublished Notes, Drafts, publication candidates, and their sidecars live at `content/workspace/`, which is ignored by the public repository but initialized as its own private Git repository with a private GitHub remote. This keeps one local filesystem contract for chat-first tools while adding private history, backup, web/mobile access, and multi-device synchronization at no cost. Material requiring provider-blind confidentiality belongs in a separate end-to-end encrypted vault rather than GitHub.

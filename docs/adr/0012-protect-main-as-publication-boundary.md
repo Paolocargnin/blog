@@ -1,0 +1,3 @@
+# Protect main as the publication boundary
+
+`main` represents the public blog and accepts changes only through pull requests that pass required content, test, and build checks and receive one approval from someone other than the pull-request author. Paolo Cargnin and `dianasstanciu-hash` may each draft a Post or review the other's work, while Paolo remains the publication's Author. Direct pushes, force pushes, and branch deletion are blocked, rules apply to administrators, and review conversations must be resolved. This makes a merge the explicit publication act and preserves a reviewable public history for new Posts and meaning-changing Corrections.

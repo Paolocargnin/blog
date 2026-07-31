@@ -1,0 +1,3 @@
+# Compose blog workflow skills with dedicated writing skills
+
+Repository-local blog skills own the editorial lifecycle, evidence, approval gates, publication, corrections, and archival. They compose the installed `writing-fragments`, `writing-shape`, and `writing-beats` skills for prose development rather than duplicating them; deterministic scripts own file creation, movement, and validation. A documented router recommends the next skill for an article's current state. The system is versioned with the repository and may evolve through explicit, backward-compatible changes as real writing sessions reveal better practices.

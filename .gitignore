@@ -1,0 +1,17 @@
+# The Workspace contains unpublished writing and evidence. It is versioned only
+# in its own private repository; never stage it in this public repository.
+content/workspace/
+
+# Local secrets and machine-specific configuration. Commit documented examples
+# such as .env.example, never an actual environment file.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Dependencies, generated output, and local tool caches.
+node_modules/
+dist/
+.astro/
+coverage/
+.DS_Store
