@@ -18,6 +18,12 @@
     "test": "vitest run",
     "content:check": "node ./scripts/content-check.mjs",
     "content:check:public": "node ./scripts/content-check.mjs --public-only",
+    "workspace:init": "node ./scripts/workspace-init.mjs",
+    "workspace:create": "node ./scripts/workspace-create.mjs",
+    "workspace:develop": "node ./scripts/workspace-develop.mjs",
+    "workspace:validate": "node ./scripts/workspace-validate.mjs",
+    "workspace:promote": "node ./scripts/workspace-promote.mjs",
+    "workspace:publish": "node ./scripts/workspace-publish.mjs",
     "quality": "pnpm format && pnpm type-check && pnpm test && pnpm content:check && pnpm build"
   },
   "dependencies": {

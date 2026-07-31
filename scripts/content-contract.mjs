@@ -203,6 +203,43 @@ function validatePostMetadata(data, filePath, errors) {
   }
 }
 
+/**
+ * Validate one Markdown document before a Publication candidate is copied into
+ * the public Posts collection. The candidate keeps its article.md filename in
+ * the Workspace, so the intended public slug is supplied separately.
+ */
+export async function validatePostFile(filePath, slug, postsDirectory) {
+  const errors = [];
+  if (!slugPattern.test(slug)) {
+    errors.push(`${slug}: filename must be a lowercase hyphenated slug.`);
+  }
+  const { data } = await readMarkdown(filePath, errors);
+  validatePostMetadata(data, filePath, errors);
+
+  if (
+    postsDirectory &&
+    typeof data.id === 'string' &&
+    stableIdPattern.test(data.id)
+  ) {
+    const entries = await readdir(postsDirectory, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isFile() || path.extname(entry.name) !== markdownExtension) {
+        continue;
+      }
+      const existingPost = path.join(postsDirectory, entry.name);
+      const { data: existingData } = await readMarkdown(existingPost, errors);
+      if (existingData.id === data.id) {
+        errors.push(
+          `${filePath}: id duplicates ${existingPost}; stable Post IDs must be unique.`,
+        );
+      }
+    }
+  }
+  if (errors.length > 0) {
+    throw new ContentContractError(errors);
+  }
+}
+
 async function validatePublicDirectory(postsDirectory, errors) {
   if (!(await exists(postsDirectory))) {
     errors.push(`${postsDirectory}: public Posts directory is required.`);

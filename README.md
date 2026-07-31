@@ -15,5 +15,9 @@ install`.
 - `pnpm content:check` — validate public Posts and the local Workspace when it
   is present.
 - `pnpm content:check:public` — validate only public Posts, as production does.
+- `pnpm workspace:validate` — validate the local private Workspace contract.
 - `pnpm build` — validate and create a production build from public Posts only.
 - `pnpm quality` — run all required checks.
+
+See [the private Workspace guide](docs/workspace.md) for setup, lifecycle,
+sync, recovery, and sensitive-source boundaries.
