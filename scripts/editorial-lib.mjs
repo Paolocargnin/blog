@@ -2,6 +2,7 @@ import { readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { contentContract } from '../src/content/contract.mjs';
+import { validatePostFile } from './content-contract.mjs';
 import {
   hasUnresolvedVerificationMarkers,
   publicationGateErrors,
@@ -13,6 +14,7 @@ import {
 } from './editorial-paths.mjs';
 import {
   parseMarkdownDocument,
+  markdownSections,
   serializeMarkdownDocument,
 } from './markdown-lib.mjs';
 
@@ -27,9 +29,17 @@ export {
 export { locateWorkingArticle } from './editorial-paths.mjs';
 
 const utf8 = 'utf8';
+const briefSections = Object.freeze([
+  'reader promise',
+  'tentative claim or question',
+  'why now',
+  "what would change the author's mind",
+  'reporting plan and verification level',
+  'exit gate',
+]);
 
 const templates = Object.freeze({
-  brief: `# Article brief\n\n## Reader promise\n\n## Tentative claim or question\n\n## Why now\n\n## What would change the Author's mind\n\n## Reporting plan and verification level\n`,
+  brief: `# Article brief\n\n## Reader promise\n\n## Tentative claim or question\n\n## Why now\n\n## What would change the Author's mind\n\n## Reporting plan and verification level\n\n## Exit gate\n`,
   sources: `# Private source ledger\n\nRecord the owner, canonical URL or locator, access date, supported claims, verification notes, limitations, and contrary evidence for each source. Record why no external sources are needed when the article is purely personal.\n`,
   'fact-check': `---\nworkflowVersion: 1\nreviewedBy: ""\nreviewedAt: ""\ncandidateDigest: ""\nindependent: false\nstatus: open\n---\n\n# Fact-check\n\n- [ ] Verify every factual claim, quotation, number, link, code sample, and piece of metadata against attributable evidence.\n- [ ] Verify every factual statement introduced or rewritten by AI.\n- [ ] Record corrections and remaining uncertainty below.\n`,
   'counter-discussion': `---\nworkflowVersion: 1\nreviewedBy: ""\nreviewedAt: ""\ncandidateDigest: ""\nstatus: open\nfindings: []\n---\n\n# Counter-discussion\n\nChallenge the thesis, evidence, assumptions, missing perspectives, and strongest plausible objections. Record every finding in frontmatter with a disposition and rationale; keep the review separate from the article.\n`,
@@ -123,6 +133,37 @@ export async function returnCandidateToDraft({ workspace, slug }) {
   return draftDirectory;
 }
 
+async function draftIsContentComplete(articleDirectory, slug) {
+  const articleFile = path.join(
+    articleDirectory,
+    contentContract.workspace.articleFile,
+  );
+  const briefFile = path.join(articleDirectory, 'brief.md');
+  if (!(await pathExists(articleFile)) || !(await pathExists(briefFile))) {
+    return false;
+  }
+  const articleSource = await readFile(articleFile, utf8);
+  let article;
+  try {
+    article = parseMarkdownDocument(articleSource, articleFile);
+    await validatePostFile(articleFile, slug);
+  } catch {
+    return false;
+  }
+  if (article.body.trim() === '') {
+    return false;
+  }
+
+  const briefSource = await readFile(briefFile, utf8);
+  const sections = new Map(
+    markdownSections(briefSource).map((section) => [
+      section.title.toLowerCase(),
+      briefSource.slice(section.contentStart, section.end).trim(),
+    ]),
+  );
+  return briefSections.every((title) => sections.get(title));
+}
+
 export async function editorialStatus({ workspace, postsDirectory, slug }) {
   requireEditorialSlug(slug);
   const postFile = path.join(postsDirectory, `${slug}.md`);
@@ -138,7 +179,7 @@ export async function editorialStatus({ workspace, postsDirectory, slug }) {
     return { stage: 'note', nextSkill: 'blog-develop' };
   }
   if (article.lifecycle === 'drafts') {
-    if (!(await pathExists(path.join(article.directory, 'brief.md')))) {
+    if (!(await draftIsContentComplete(article.directory, slug))) {
       return { stage: 'draft', nextSkill: 'blog-develop' };
     }
     const draftFile = path.join(

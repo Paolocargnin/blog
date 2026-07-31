@@ -39,3 +39,51 @@ export function parseMarkdownDocument(source, filePath) {
 export function serializeMarkdownDocument(data, body) {
   return `---\n${stringify(data).trimEnd()}\n---\n\n${body.replace(/^\s+/, '')}`;
 }
+
+export function markdownSections(body) {
+  const sections = [];
+  let fence;
+  let offset = 0;
+  for (const match of body.matchAll(/.*(?:\n|$)/g)) {
+    const lineWithEnding = match[0];
+    if (lineWithEnding === '') {
+      continue;
+    }
+    const line = lineWithEnding.replace(/\r?\n$/, '');
+    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
+    if (fence) {
+      if (
+        fenceMatch &&
+        fenceMatch[1][0] === fence.character &&
+        fenceMatch[1].length >= fence.length
+      ) {
+        fence = undefined;
+      }
+      offset += lineWithEnding.length;
+      continue;
+    }
+    if (fenceMatch) {
+      fence = {
+        character: fenceMatch[1][0],
+        length: fenceMatch[1].length,
+      };
+      offset += lineWithEnding.length;
+      continue;
+    }
+
+    const heading = line.match(/^ {0,3}##(?!#)\s+(.+?)\s*#*\s*$/);
+    if (heading) {
+      if (sections.length > 0) {
+        sections.at(-1).end = offset;
+      }
+      sections.push({
+        title: heading[1].trim(),
+        start: offset,
+        contentStart: offset + lineWithEnding.length,
+        end: body.length,
+      });
+    }
+    offset += lineWithEnding.length;
+  }
+  return sections;
+}

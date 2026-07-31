@@ -14,8 +14,9 @@ description: Package a verified Publication candidate when metadata, links, acce
    code, alt text, heading order, small-screen rendering, and prose after all
    review fixes. Record the preparer and date; resolve every checklist item.
 4. Propose `sourcesProposal: included` or `omitted` with a rationale. When
-   included, curate a public `## Sources` section in the Post; keep private,
-   confidential, or exhaustive ledger details in `sources.md`.
+   included, end the Post with one public `## Sources` section containing a
+   curated Markdown list of sources; keep private, confidential, or exhaustive
+   ledger details in `sources.md`.
 5. Record `aiDisclosure: included` or `not-material` with a rationale. When AI
    contribution is unusually material or relevant to the subject, add a candid
    public `## AI disclosure` while keeping the Author accountable.

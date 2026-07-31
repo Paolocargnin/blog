@@ -8,6 +8,7 @@ import { locateWorkingArticle, pathExists } from './editorial-paths.mjs';
 import {
   isIsoDate,
   isPlainObject,
+  markdownSections,
   parseMarkdownDocument,
   serializeMarkdownDocument,
 } from './markdown-lib.mjs';
@@ -121,6 +122,13 @@ function publicationCheckErrors(
   expectedDigest,
   errors,
 ) {
+  const articleSections = markdownSections(articleBody);
+  const sourcesSections = articleSections.filter(
+    (section) => section.title.toLowerCase() === 'sources',
+  );
+  const aiDisclosureSections = articleSections.filter(
+    (section) => section.title.toLowerCase() === 'ai disclosure',
+  );
   if (data.workflowVersion !== editorialWorkflowContract.version) {
     errors.push(
       `${filePath}: workflowVersion must be ${editorialWorkflowContract.version}.`,
@@ -144,18 +152,24 @@ function publicationCheckErrors(
     errors.push(`${filePath}: sourcesProposal must be included or omitted.`);
   }
   requireText(data, 'sourcesRationale', filePath, errors);
-  if (
-    data.sourcesProposal === 'included' &&
-    !/^## Sources\s*$/im.test(articleBody)
-  ) {
+  if (data.sourcesProposal === 'included' && sourcesSections.length !== 1) {
     errors.push(
-      `${filePath}: an included Sources proposal requires a public ## Sources section.`,
+      `${filePath}: an included Sources proposal requires exactly one public ## Sources section.`,
     );
   }
-  if (
-    data.sourcesProposal === 'omitted' &&
-    /^## Sources\s*$/im.test(articleBody)
-  ) {
+  if (data.sourcesProposal === 'included' && sourcesSections.length === 1) {
+    const sources = sourcesSections[0];
+    const sourceEntries = articleBody.slice(sources.contentStart, sources.end);
+    if (articleSections.at(-1) !== sources) {
+      errors.push(`${filePath}: the public ## Sources section must be last.`);
+    }
+    if (!/^\s*(?:[-*+]\s+|\d+\.\s+)\S/m.test(sourceEntries)) {
+      errors.push(
+        `${filePath}: the public ## Sources section must contain at least one source list entry.`,
+      );
+    }
+  }
+  if (data.sourcesProposal === 'omitted' && sourcesSections.length > 0) {
     errors.push(
       `${filePath}: an omitted Sources proposal conflicts with the public ## Sources section.`,
     );
@@ -166,21 +180,25 @@ function publicationCheckErrors(
     errors.push(`${filePath}: aiDisclosure must be included or not-material.`);
   }
   requireText(data, 'aiDisclosureRationale', filePath, errors);
-  if (
-    data.aiDisclosure === 'included' &&
-    !/^## AI disclosure\s*$/im.test(articleBody)
-  ) {
+  if (data.aiDisclosure === 'included' && aiDisclosureSections.length !== 1) {
     errors.push(
       `${filePath}: an included AI disclosure requires a public ## AI disclosure section.`,
     );
   }
-  if (
-    data.aiDisclosure === 'not-material' &&
-    /^## AI disclosure\s*$/im.test(articleBody)
-  ) {
+  if (data.aiDisclosure === 'not-material' && aiDisclosureSections.length > 0) {
     errors.push(
       `${filePath}: a not-material AI decision conflicts with the public ## AI disclosure section.`,
     );
+  }
+  if (data.aiDisclosure === 'included' && aiDisclosureSections.length === 1) {
+    const disclosure = aiDisclosureSections[0];
+    if (
+      articleBody.slice(disclosure.contentStart, disclosure.end).trim() === ''
+    ) {
+      errors.push(
+        `${filePath}: the public ## AI disclosure section must explain the material contribution.`,
+      );
+    }
   }
   if (/^\s*-\s+\[ \]/m.test(body)) {
     errors.push(`${filePath}: every publication-check item must be resolved.`);

@@ -12,6 +12,7 @@ import {
   validatePublicationEvidence,
 } from '../scripts/editorial-lib.mjs';
 import { scaffoldWorkspace } from '../scripts/workspace-lib.mjs';
+import { markdownSections } from '../scripts/markdown-lib.mjs';
 
 const temporaryDirectories = [];
 
@@ -65,6 +66,16 @@ describe('editorial workflow', () => {
 
     await expect(
       editorialStatus({ workspace, postsDirectory, slug }),
+    ).resolves.toMatchObject({ nextSkill: 'blog-develop' });
+
+    await writeFile(
+      path.join(draft, 'brief.md'),
+      `# Article brief\n\n## Reader promise\n\nA useful reflection.\n\n## Tentative claim or question\n\nReflection clarifies experience.\n\n## Why now\n\nThe lesson is timely.\n\n## What would change the Author's mind\n\nContrary personal evidence.\n\n## Reporting plan and verification level\n\nPersonal experience only.\n\n## Exit gate\n\nA coherent reader takeaway.\n`,
+      'utf8',
+    );
+
+    await expect(
+      editorialStatus({ workspace, postsDirectory, slug }),
     ).resolves.toMatchObject({ nextSkill: 'blog-promote' });
 
     await writeFile(
@@ -75,6 +86,14 @@ describe('editorial workflow', () => {
     await expect(
       editorialStatus({ workspace, postsDirectory, slug }),
     ).resolves.toMatchObject({ nextSkill: 'blog-report' });
+  });
+
+  it('recognizes editorial sections only outside fenced code blocks', () => {
+    expect(
+      markdownSections(
+        '```markdown\n## Sources\n```\n\n## AI disclosure\n\nMaterial assistance.\n',
+      ).map((section) => section.title),
+    ).toEqual(['AI disclosure']);
   });
 
   it('creates each review sidecar once and only in its valid lifecycle', async () => {
@@ -196,10 +215,73 @@ describe('editorial workflow', () => {
       validatePublicationEvidence({ workspace, slug: 'candidate' }),
     ).rejects.toMatchObject({
       errors: expect.arrayContaining([
-        expect.stringContaining('requires a public ## Sources section'),
+        expect.stringContaining(
+          'requires exactly one public ## Sources section',
+        ),
         expect.stringContaining(
           'every publication-check item must be resolved',
         ),
+      ]),
+    });
+  });
+
+  it('requires a non-empty public Sources list as the final Post section', async () => {
+    const { workspace } = await temporaryProject();
+    const candidate = await createCandidate(workspace);
+    await writeFile(
+      path.join(candidate, 'article.md'),
+      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\n---\n\nA checked claim.\n\n## Sources\n\n- [Primary source](https://example.com/source)\n`,
+      'utf8',
+    );
+    const digest = await candidateDigest({ workspace, slug: 'candidate' });
+    await writeFile(
+      path.join(candidate, 'fact-check.md'),
+      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
+      'utf8',
+    );
+    await writeFile(
+      path.join(candidate, 'counter-discussion.md'),
+      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: resolved\nfindings: []\n---\n\n# Counter-discussion\n\nResolved.\n`,
+      'utf8',
+    );
+    await writeFile(
+      path.join(candidate, 'publication-check.md'),
+      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: ready\nsourcesProposal: included\nsourcesRationale: Readers need the supporting evidence.\naiDisclosure: not-material\naiDisclosureRationale: No material contribution.\n---\n\n# Publication check\n\nReady.\n`,
+      'utf8',
+    );
+
+    await expect(
+      validatePublicationEvidence({ workspace, slug: 'candidate' }),
+    ).resolves.toBeUndefined();
+
+    await writeFile(
+      path.join(candidate, 'article.md'),
+      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\n---\n\nA checked claim.\n\n## Sources\n\n## Afterword\n\nThis section incorrectly follows Sources.\n`,
+      'utf8',
+    );
+    const invalidDigest = await candidateDigest({
+      workspace,
+      slug: 'candidate',
+    });
+    for (const evidenceFile of [
+      'fact-check.md',
+      'counter-discussion.md',
+      'publication-check.md',
+    ]) {
+      const filePath = path.join(candidate, evidenceFile);
+      await writeFile(
+        filePath,
+        (await readFile(filePath, 'utf8')).replace(digest, invalidDigest),
+        'utf8',
+      );
+    }
+
+    await expect(
+      validatePublicationEvidence({ workspace, slug: 'candidate' }),
+    ).rejects.toMatchObject({
+      errors: expect.arrayContaining([
+        expect.stringContaining('public ## Sources section must be last'),
+        expect.stringContaining('must contain at least one source list entry'),
       ]),
     });
   });
@@ -262,14 +344,33 @@ describe('editorial workflow', () => {
       corrected.replace(/\n## Corrections[\s\S]*$/, '\n'),
       'utf8',
     );
-    await expect(
-      correctPost({
-        postsDirectory,
-        slug: 'published-post',
-        replacementFile: historyRemovingTypo,
-        kind: 'typo',
-        approvedBy: 'Paolo Cargnin',
-      }),
-    ).rejects.toThrow('must preserve the visible Corrections history');
+    await correctPost({
+      postsDirectory,
+      slug: 'published-post',
+      replacementFile: historyRemovingTypo,
+      kind: 'typo',
+      approvedBy: 'Paolo Cargnin',
+    });
+    const afterTypo = await readFile(postFile, 'utf8');
+    expect(afterTypo).toContain('Corrected the central claim.');
+
+    const secondReplacement = path.join(root, 'second-replacement.md');
+    await writeFile(
+      secondReplacement,
+      afterTypo.replace(/## Corrections[\s\S]*$/, '## Corrections\n\n'),
+      'utf8',
+    );
+    await correctPost({
+      postsDirectory,
+      slug: 'published-post',
+      replacementFile: secondReplacement,
+      kind: 'revision',
+      date: '2026-08-01',
+      summary: 'Expanded the corrected explanation.',
+      approvedBy: 'Paolo Cargnin',
+    });
+    const twiceCorrected = await readFile(postFile, 'utf8');
+    expect(twiceCorrected).toContain('Corrected the central claim.');
+    expect(twiceCorrected).toContain('Expanded the corrected explanation.');
   });
 });

@@ -5,6 +5,7 @@ import path from 'node:path';
 import { validatePostFile } from './content-contract.mjs';
 import {
   isIsoDate,
+  markdownSections,
   parseMarkdownDocument,
   serializeMarkdownDocument,
 } from './markdown-lib.mjs';
@@ -17,27 +18,32 @@ function visibleCorrection(correction) {
   return `- **${correction.date} — ${label}:** ${correction.summary}`;
 }
 
-function addVisibleCorrections(body, corrections) {
-  const heading = /^## Corrections\s*$/im.exec(body);
-  if (!heading) {
-    return `${body.trimEnd()}\n\n## Corrections\n\n${corrections.map(visibleCorrection).join('\n')}\n`;
+function withoutCorrectionSections(body) {
+  const sections = markdownSections(body).filter(
+    (section) => section.title.toLowerCase() === 'corrections',
+  );
+  let result = body;
+  for (const section of sections.reverse()) {
+    result = `${result.slice(0, section.start).trimEnd()}\n\n${result
+      .slice(section.end)
+      .replace(/^\s+/, '')}`;
   }
-  const insertAt = heading.index + heading[0].length;
-  const latest = corrections.at(-1);
-  return `${body.slice(0, insertAt)}\n\n${visibleCorrection(latest)}${body.slice(insertAt)}`;
+  return result.trimEnd();
 }
 
-function preserveVisibleCorrectionHistory(body, corrections) {
-  const missing = corrections.filter(
-    (correction) =>
-      !body.includes(correction.date) || !body.includes(correction.summary),
-  );
-  if (missing.length > 0) {
-    throw new Error(
-      'A typo replacement must preserve the visible Corrections history.',
-    );
+function setVisibleCorrections(body, corrections) {
+  if (corrections.length === 0) {
+    return body;
   }
-  return body;
+  const cleanBody = withoutCorrectionSections(body);
+  const section = `## Corrections\n\n${corrections.map(visibleCorrection).join('\n')}`;
+  const sources = markdownSections(cleanBody).find(
+    (candidate) => candidate.title.toLowerCase() === 'sources',
+  );
+  if (sources) {
+    return `${cleanBody.slice(0, sources.start).trimEnd()}\n\n${section}\n\n${cleanBody.slice(sources.start).replace(/^\s+/, '')}`;
+  }
+  return `${cleanBody}\n\n${section}\n`;
 }
 
 export async function correctPost({
@@ -109,13 +115,10 @@ export async function correctPost({
     ];
   }
 
-  const nextBody =
-    kind === 'typo'
-      ? preserveVisibleCorrectionHistory(
-          replacement.body,
-          nextData.corrections ?? [],
-        )
-      : addVisibleCorrections(replacement.body, nextData.corrections);
+  const nextBody = setVisibleCorrections(
+    replacement.body,
+    nextData.corrections ?? [],
+  );
   const nextSource = serializeMarkdownDocument(nextData, nextBody);
   const temporaryFile = path.join(
     postsDirectory,
