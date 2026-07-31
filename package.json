@@ -1,0 +1,31 @@
+{
+  "name": "pc-the-blog",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": "24.11.1",
+    "pnpm": "10.32.1"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier --check README.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
+    "format:write": "prettier --write README.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
+    "type-check": "astro check",
+    "test": "vitest run",
+    "content:check": "node ./scripts/content-check.mjs",
+    "quality": "pnpm format && pnpm type-check && pnpm test && pnpm content:check && pnpm build"
+  },
+  "dependencies": {
+    "astro": "^7.1.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
+}
