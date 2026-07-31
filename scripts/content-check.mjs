@@ -1,15 +1,33 @@
-import { access } from 'node:fs/promises';
+import path from 'node:path';
 
-const requiredPaths = ['src/pages/index.astro'];
+import { validateContent } from './content-contract.mjs';
 
-await Promise.all(
-  requiredPaths.map(async (path) => {
-    try {
-      await access(path);
-    } catch {
-      throw new Error(`Required public content is missing: ${path}`);
-    }
-  }),
+const argumentsByName = new Map();
+for (let index = 0; index < process.argv.length; index += 1) {
+  const argument = process.argv[index];
+  if (
+    argument.startsWith('--') &&
+    process.argv[index + 1]?.startsWith('--') === false
+  ) {
+    argumentsByName.set(argument, process.argv[index + 1]);
+    index += 1;
+  }
+}
+
+const publicOnly = process.argv.includes('--public-only');
+const options = {
+  publicOnly,
+  postsDirectory: argumentsByName.has('--posts')
+    ? path.resolve(argumentsByName.get('--posts'))
+    : undefined,
+  workspaceDirectory: argumentsByName.has('--workspace')
+    ? path.resolve(argumentsByName.get('--workspace'))
+    : undefined,
+};
+
+const { workspacePresent } = await validateContent(options);
+console.log(
+  publicOnly || !workspacePresent
+    ? 'Public Posts satisfy content contract v1.'
+    : 'Public Posts and Workspace satisfy content contract v1.',
 );
-
-console.log('Public content baseline is valid.');

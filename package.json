@@ -17,10 +17,12 @@
     "type-check": "astro check",
     "test": "vitest run",
     "content:check": "node ./scripts/content-check.mjs",
+    "content:check:public": "node ./scripts/content-check.mjs --public-only",
     "quality": "pnpm format && pnpm type-check && pnpm test && pnpm content:check && pnpm build"
   },
   "dependencies": {
-    "astro": "^7.1.6"
+    "astro": "^7.1.6",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
