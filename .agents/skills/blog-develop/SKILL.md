@@ -19,8 +19,11 @@ description: Develop a selected private Note into an article-shaped Draft and br
    argument or `$writing-beats` for a beat-led journey. Give the user the exact
    invocation with `notes.md` as the read-only pile and `article.md` as output,
    then pause. Preserve their prose methods instead of reproducing them here.
-5. When the user returns, ensure known evidence gaps remain visible, run
-   `pnpm workspace:validate`, then commit and push the Draft privately.
+5. When the user returns, keep known evidence gaps machine-visible with
+   `<!-- TODO: SOURCE -->`, `<!-- TODO: VERIFY -->`,
+   `<!-- TODO: VERIFY NUMBER -->`, or
+   `<!-- TODO: SEEK COUNTEREXAMPLE -->`. Run `pnpm workspace:validate`, then
+   commit and push the Draft privately.
 
 Finish when the Draft has a stable identity, a feasible brief, an intentional
 shape, and visible reporting gaps. Route missing evidence to `$blog-report`.

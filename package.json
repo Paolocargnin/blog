@@ -28,6 +28,7 @@
     "editorial:create": "node ./scripts/editorial-create.mjs",
     "editorial:status": "node ./scripts/editorial-status.mjs",
     "editorial:check": "node ./scripts/editorial-check.mjs",
+    "editorial:digest": "node ./scripts/editorial-digest.mjs",
     "post:correct": "node ./scripts/post-correct.mjs",
     "skills:check": "node ./scripts/skill-check.mjs",
     "quality": "pnpm format && pnpm type-check && pnpm test && pnpm skills:check && pnpm content:check && pnpm build"

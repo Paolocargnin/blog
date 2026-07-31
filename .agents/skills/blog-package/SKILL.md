@@ -19,9 +19,13 @@ description: Package a verified Publication candidate when metadata, links, acce
 5. Record `aiDisclosure: included` or `not-material` with a rationale. When AI
    contribution is unusually material or relevant to the subject, add a candid
    public `## AI disclosure` while keeping the Author accountable.
-6. Set `status: ready`, run `pnpm editorial:check -- --slug <slug>`,
-   `pnpm content:check`, and the relevant render/link checks. Commit and push the
-   package privately.
+6. After the final public text and private ledger are settled, run
+   `pnpm editorial:digest -- --slug <slug>` and record that exact value as
+   `candidateDigest`. Set `status: ready`, then run
+   `pnpm editorial:check -- --slug <slug>`, `pnpm content:check`, and the
+   relevant render/link checks. If the router returns to fact-check or
+   counter-discussion, re-review this exact digest before packaging again.
+   Commit and push the package privately.
 
 Finish when deterministic gates agree that the exact final candidate is ready.
 Any later substantive change invalidates the package and returns to Draft.

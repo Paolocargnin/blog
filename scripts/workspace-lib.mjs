@@ -7,7 +7,11 @@ import {
   validatePostFile,
   validatePublicContent,
 } from './content-contract.mjs';
-import { validatePublicationEvidence } from './editorial-lib.mjs';
+import {
+  candidateSnapshot,
+  recordPublicationApproval,
+  validatePublicationEvidence,
+} from './editorial-lib.mjs';
 import { contentContract, slugPattern } from '../src/content/contract.mjs';
 
 const utf8 = 'utf8';
@@ -30,6 +34,14 @@ export function requireHumanApproval(approvedBy) {
     );
   }
   return approvedBy.trim();
+}
+
+function requireApprovedDigest(approvedDigest, expectedDigest) {
+  if (approvedDigest !== expectedDigest) {
+    throw new Error(
+      `Human approval must name the exact candidate digest. Re-inspect the candidate and re-run with --approved-digest ${expectedDigest}.`,
+    );
+  }
 }
 
 async function exists(target) {
@@ -148,6 +160,7 @@ export async function publishCandidate({
   postsDirectory,
   slug,
   approvedBy,
+  approvedDigest,
 }) {
   requireHumanApproval(approvedBy);
   const candidateDirectory = articleDirectory(
@@ -173,8 +186,16 @@ export async function publishCandidate({
   await validatePublicationEvidence({ workspace, slug });
   await validatePublicContent({ postsDirectory });
   await validatePostFile(candidateFile, slug, postsDirectory);
+  const snapshot = await candidateSnapshot({ workspace, slug });
+  requireApprovedDigest(approvedDigest, snapshot.digest);
+  await recordPublicationApproval({
+    workspace,
+    slug,
+    approvedBy: approvedBy.trim(),
+    approvedDigest,
+  });
   await mkdir(postsDirectory, { recursive: true });
-  await writeFile(postFile, await readFile(candidateFile, utf8), utf8);
+  await writeFile(postFile, snapshot.articleSource, utf8);
   return postFile;
 }
 

@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { correctPost } from '../scripts/correction-lib.mjs';
 import {
+  candidateDigest,
   createEditorialFile,
   editorialStatus,
   returnCandidateToDraft,
@@ -49,6 +50,33 @@ afterEach(async () => {
 });
 
 describe('editorial workflow', () => {
+  it('routes a Draft by explicit verification gaps without requiring a source ledger', async () => {
+    const { workspace, postsDirectory } = await temporaryProject();
+    const slug = 'personal-draft';
+    const draft = path.join(workspace, 'drafts', slug);
+    await mkdir(draft, { recursive: true });
+    const articleFile = path.join(draft, 'article.md');
+    await writeFile(
+      articleFile,
+      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Personal draft\ndescription: A personal Draft with no external evidence requirement.\npublishedAt: 2026-07-31\ntags:\n  - writing\n---\n\nA personal reflection.\n`,
+      'utf8',
+    );
+    await writeFile(path.join(draft, 'brief.md'), '# Brief\n', 'utf8');
+
+    await expect(
+      editorialStatus({ workspace, postsDirectory, slug }),
+    ).resolves.toMatchObject({ nextSkill: 'blog-promote' });
+
+    await writeFile(
+      articleFile,
+      `${await readFile(articleFile, 'utf8')}\n<!-- TODO: SOURCE -->\n`,
+      'utf8',
+    );
+    await expect(
+      editorialStatus({ workspace, postsDirectory, slug }),
+    ).resolves.toMatchObject({ nextSkill: 'blog-report' });
+  });
+
   it('creates each review sidecar once and only in its valid lifecycle', async () => {
     const { workspace } = await temporaryProject();
     const candidate = await createCandidate(workspace);
@@ -72,6 +100,7 @@ describe('editorial workflow', () => {
   it('routes candidates through fact-check, counter-discussion, package, then publish', async () => {
     const { workspace, postsDirectory } = await temporaryProject();
     const candidate = await createCandidate(workspace);
+    const digest = await candidateDigest({ workspace, slug: 'candidate' });
 
     await expect(
       editorialStatus({ workspace, postsDirectory, slug: 'candidate' }),
@@ -82,7 +111,7 @@ describe('editorial workflow', () => {
 
     await writeFile(
       path.join(candidate, 'fact-check.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
       'utf8',
     );
     await expect(
@@ -91,7 +120,7 @@ describe('editorial workflow', () => {
 
     await writeFile(
       path.join(candidate, 'counter-discussion.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\nstatus: resolved\nfindings: []\n---\n\n# Counter-discussion\n\nResolved.\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: resolved\nfindings: []\n---\n\n# Counter-discussion\n\nResolved.\n`,
       'utf8',
     );
     await expect(
@@ -100,7 +129,7 @@ describe('editorial workflow', () => {
 
     await writeFile(
       path.join(candidate, 'publication-check.md'),
-      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\nstatus: ready\nsourcesProposal: omitted\nsourcesRationale: The claim is direct experience.\naiDisclosure: not-material\naiDisclosureRationale: No material AI contribution appears in this fixture.\n---\n\n# Publication check\n\nReady.\n`,
+      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: ready\nsourcesProposal: omitted\nsourcesRationale: The claim is direct experience.\naiDisclosure: not-material\naiDisclosureRationale: No material AI contribution appears in this fixture.\n---\n\n# Publication check\n\nReady.\n`,
       'utf8',
     );
     await expect(
@@ -114,19 +143,20 @@ describe('editorial workflow', () => {
   it('blocks non-independent checks and unresolved counter-discussion findings', async () => {
     const { workspace } = await temporaryProject();
     const candidate = await createCandidate(workspace);
+    const digest = await candidateDigest({ workspace, slug: 'candidate' });
     await writeFile(
       path.join(candidate, 'fact-check.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Drafter\nreviewedAt: 2026-07-31\nindependent: false\nstatus: passed\n---\n\n# Fact-check\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Drafter\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nindependent: false\nstatus: passed\n---\n\n# Fact-check\n`,
       'utf8',
     );
     await writeFile(
       path.join(candidate, 'counter-discussion.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\nstatus: resolved\nfindings:\n  - summary: The main objection is unanswered.\n    disposition: open\n    rationale: It still needs work.\n---\n\n# Counter-discussion\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: resolved\nfindings:\n  - summary: The main objection is unanswered.\n    disposition: open\n    rationale: It still needs work.\n---\n\n# Counter-discussion\n`,
       'utf8',
     );
     await writeFile(
       path.join(candidate, 'publication-check.md'),
-      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\nstatus: ready\nsourcesProposal: omitted\nsourcesRationale: Direct experience only.\naiDisclosure: not-material\naiDisclosureRationale: No material contribution.\n---\n\n# Publication check\n`,
+      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: ready\nsourcesProposal: omitted\nsourcesRationale: Direct experience only.\naiDisclosure: not-material\naiDisclosureRationale: No material contribution.\n---\n\n# Publication check\n`,
       'utf8',
     );
 
@@ -145,19 +175,20 @@ describe('editorial workflow', () => {
   it('blocks an unfinished package whose public Sources proposal does not match the article', async () => {
     const { workspace } = await temporaryProject();
     const candidate = await createCandidate(workspace);
+    const digest = await candidateDigest({ workspace, slug: 'candidate' });
     await writeFile(
       path.join(candidate, 'fact-check.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
       'utf8',
     );
     await writeFile(
       path.join(candidate, 'counter-discussion.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\nstatus: resolved\nfindings: []\n---\n\n# Counter-discussion\n\nResolved.\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Challenger\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: resolved\nfindings: []\n---\n\n# Counter-discussion\n\nResolved.\n`,
       'utf8',
     );
     await writeFile(
       path.join(candidate, 'publication-check.md'),
-      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\nstatus: ready\nsourcesProposal: included\nsourcesRationale: Readers should receive the supporting source.\naiDisclosure: not-material\naiDisclosureRationale: No material contribution.\n---\n\n# Publication check\n\n- [ ] Add the proposed public Sources section.\n`,
+      `---\nworkflowVersion: 1\npreparedBy: Paolo Cargnin\npreparedAt: 2026-07-31\ncandidateDigest: ${digest}\nstatus: ready\nsourcesProposal: included\nsourcesRationale: Readers should receive the supporting source.\naiDisclosure: not-material\naiDisclosureRationale: No material contribution.\n---\n\n# Publication check\n\n- [ ] Add the proposed public Sources section.\n`,
       'utf8',
     );
 
@@ -176,9 +207,10 @@ describe('editorial workflow', () => {
   it('returns substantive changes to Draft and invalidates stale review evidence', async () => {
     const { workspace } = await temporaryProject();
     const candidate = await createCandidate(workspace);
+    const digest = await candidateDigest({ workspace, slug: 'candidate' });
     await writeFile(
       path.join(candidate, 'fact-check.md'),
-      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
+      `---\nworkflowVersion: 1\nreviewedBy: Checker\nreviewedAt: 2026-07-31\ncandidateDigest: ${digest}\nindependent: true\nstatus: passed\n---\n\n# Fact-check\n\nPassed.\n`,
       'utf8',
     );
 
@@ -193,6 +225,7 @@ describe('editorial workflow', () => {
     );
     expect(invalidated).toContain('independent: false');
     expect(invalidated).toContain('status: open');
+    expect(invalidated).toContain('candidateDigest: ""');
   });
 
   it('prepares visible Corrections while preserving stable identity and publication date', async () => {
@@ -218,5 +251,25 @@ describe('editorial workflow', () => {
     expect(corrected).toContain('updatedAt: 2026-07-31');
     expect(corrected).toContain('Corrected the central claim.');
     expect(corrected).toContain('The claim is correct.');
+    expect(corrected).toContain('## Corrections');
+    expect(corrected).toContain(
+      '**2026-07-31 — Correction:** Corrected the central claim.',
+    );
+
+    const historyRemovingTypo = path.join(root, 'history-removing-typo.md');
+    await writeFile(
+      historyRemovingTypo,
+      corrected.replace(/\n## Corrections[\s\S]*$/, '\n'),
+      'utf8',
+    );
+    await expect(
+      correctPost({
+        postsDirectory,
+        slug: 'published-post',
+        replacementFile: historyRemovingTypo,
+        kind: 'typo',
+        approvedBy: 'Paolo Cargnin',
+      }),
+    ).rejects.toThrow('must preserve the visible Corrections history');
   });
 });

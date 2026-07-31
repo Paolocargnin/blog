@@ -12,13 +12,16 @@ description: Publish a fully reviewed Publication candidate by preparing its pub
    `pnpm editorial:check -- --slug <slug>`, `pnpm workspace:validate`, and
    `pnpm quality`. Continue only when the router says `blog-publish` and every
    check passes.
-3. Show the human the exact candidate, Sources proposal, disclosure decision,
-   fact-check identity, counter-discussion dispositions, and intended public
-   diff. Pause for explicit named publication approval; an agent never supplies
-   or infers it.
+3. Run `pnpm editorial:digest -- --slug <slug>`. Show the human that digest,
+   the exact candidate, Sources proposal, disclosure decision, fact-check
+   identity, counter-discussion dispositions, and intended public diff. Pause
+   for explicit named approval of that exact digest; an agent never supplies or
+   infers it.
 4. After approval, create a fresh publication branch and run
-   `pnpm workspace:publish -- --slug <slug> --approved-by "<Human Name>"`.
-   The script rechecks every gate and copies without overwriting a Post.
+   `pnpm workspace:publish -- --slug <slug> --approved-by "<Human Name>"
+   --approved-digest <digest>`. The script rechecks every gate, rejects stale
+   evidence or approval, records the approval privately, and copies without
+   overwriting a Post.
 5. Run the full quality suite, review the final diff for private material,
    commit, push, and open a pull request. Require a Reviewer other than the PR
    author, passing required checks, resolved conversations, and a working

@@ -16,9 +16,12 @@ description: Run an adversarial counter-discussion on a Publication candidate wh
 3. Put every finding in the frontmatter `findings` array. The Author resolves
    each as `fixed`, `rejected`, or `accepted` and records a non-empty rationale.
    Re-review fixes that affect the finding.
-4. Set `status: resolved` only when no open checkbox or undispositioned finding
-   remains. Run `pnpm editorial:check -- --slug <slug>`, validate, commit, and
-   push the review evidence privately.
+4. After the final resolution, run `pnpm editorial:digest -- --slug <slug>` and
+   record that exact value as `candidateDigest`. Set `status: resolved` only
+   when no open checkbox or undispositioned finding remains. Run
+   `pnpm editorial:check -- --slug <slug>`, validate, commit, and push the
+   review evidence privately. An article or ledger edit invalidates the digest
+   and requires the affected review again.
 
 Substantive rewriting returns the candidate to Draft with
 `pnpm workspace:return -- --slug <slug>` and invalidates all review evidence.

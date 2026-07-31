@@ -2,35 +2,42 @@ import { randomUUID } from 'node:crypto';
 import { readFile, rename, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import { parse, stringify } from 'yaml';
-
 import { validatePostFile } from './content-contract.mjs';
+import {
+  isIsoDate,
+  parseMarkdownDocument,
+  serializeMarkdownDocument,
+} from './markdown-lib.mjs';
 import { requireHumanApproval, requireSlug } from './workspace-lib.mjs';
 
 const utf8 = 'utf8';
-const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-function parsePost(source, filePath) {
-  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
-  if (!match) {
-    throw new Error(`${filePath}: YAML frontmatter is required.`);
-  }
-  const data = parse(match[1]);
-  if (data === null || typeof data !== 'object' || Array.isArray(data)) {
-    throw new Error(`${filePath}: frontmatter must be a mapping.`);
-  }
-  return { data, body: source.slice(match[0].length) };
+function visibleCorrection(correction) {
+  const label = correction.kind === 'revision' ? 'Revision' : 'Correction';
+  return `- **${correction.date} — ${label}:** ${correction.summary}`;
 }
 
-function isIsoDate(value) {
-  if (typeof value !== 'string' || !isoDatePattern.test(value)) {
-    return false;
+function addVisibleCorrections(body, corrections) {
+  const heading = /^## Corrections\s*$/im.exec(body);
+  if (!heading) {
+    return `${body.trimEnd()}\n\n## Corrections\n\n${corrections.map(visibleCorrection).join('\n')}\n`;
   }
-  const parsed = new Date(`${value}T00:00:00Z`);
-  return (
-    !Number.isNaN(parsed.valueOf()) &&
-    parsed.toISOString().slice(0, 10) === value
+  const insertAt = heading.index + heading[0].length;
+  const latest = corrections.at(-1);
+  return `${body.slice(0, insertAt)}\n\n${visibleCorrection(latest)}${body.slice(insertAt)}`;
+}
+
+function preserveVisibleCorrectionHistory(body, corrections) {
+  const missing = corrections.filter(
+    (correction) =>
+      !body.includes(correction.date) || !body.includes(correction.summary),
   );
+  if (missing.length > 0) {
+    throw new Error(
+      'A typo replacement must preserve the visible Corrections history.',
+    );
+  }
+  return body;
 }
 
 export async function correctPost({
@@ -52,9 +59,12 @@ export async function correctPost({
   }
 
   const postFile = path.join(postsDirectory, `${slug}.md`);
-  const current = parsePost(await readFile(postFile, utf8), postFile);
+  const current = parseMarkdownDocument(
+    await readFile(postFile, utf8),
+    postFile,
+  );
   const replacementPath = path.resolve(replacementFile);
-  const replacement = parsePost(
+  const replacement = parseMarkdownDocument(
     await readFile(replacementPath, utf8),
     replacementPath,
   );
@@ -99,7 +109,14 @@ export async function correctPost({
     ];
   }
 
-  const nextSource = `---\n${stringify(nextData).trimEnd()}\n---\n\n${replacement.body.replace(/^\s+/, '')}`;
+  const nextBody =
+    kind === 'typo'
+      ? preserveVisibleCorrectionHistory(
+          replacement.body,
+          nextData.corrections ?? [],
+        )
+      : addVisibleCorrections(replacement.body, nextData.corrections);
+  const nextSource = serializeMarkdownDocument(nextData, nextBody);
   const temporaryFile = path.join(
     postsDirectory,
     `.${slug}.${randomUUID()}.md`,

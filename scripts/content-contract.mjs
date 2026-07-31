@@ -9,13 +9,13 @@ import {
   slugPattern,
   stableIdPattern,
 } from '../src/content/contract.mjs';
+import { isIsoDate as isDate, isPlainObject } from './markdown-lib.mjs';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
 );
 const markdownExtension = '.md';
-const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
 export class ContentContractError extends Error {
   constructor(errors) {
@@ -42,21 +42,6 @@ async function exists(target) {
 
 async function accessPath(target) {
   await stat(target);
-}
-
-function isPlainObject(value) {
-  return value !== null && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isDate(value) {
-  if (typeof value !== 'string' || !datePattern.test(value)) {
-    return false;
-  }
-  const parsed = new Date(`${value}T00:00:00Z`);
-  return (
-    !Number.isNaN(parsed.valueOf()) &&
-    parsed.toISOString().slice(0, 10) === value
-  );
 }
 
 async function readMarkdown(filePath, errors) {

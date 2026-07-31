@@ -25,6 +25,7 @@ function parseFrontmatter(source, filePath) {
 }
 
 const errors = [];
+const packageDocument = JSON.parse(await readFile('package.json', 'utf8'));
 for (const name of suite) {
   const skillDirectory = path.join('.agents', 'skills', name);
   const skillFile = path.join(skillDirectory, 'SKILL.md');
@@ -40,8 +41,17 @@ for (const name of suite) {
   ) {
     errors.push(`${skillFile}: description is required.`);
   }
-  if (skillSource.includes('TODO')) {
+  if (/TODO:\s*(?:add|complete|describe|replace)/i.test(skillSource)) {
     errors.push(`${skillFile}: generated TODO text remains.`);
+  }
+  if (!skillSource.includes('Finish')) {
+    errors.push(`${skillFile}: explicit finish criteria are required.`);
+  }
+  for (const match of skillSource.matchAll(/\bpnpm ([a-z0-9:-]+)/g)) {
+    const command = match[1];
+    if (!(command in packageDocument.scripts)) {
+      errors.push(`${skillFile}: pnpm command ${command} is not defined.`);
+    }
   }
 
   const agent = parse(await readFile(agentFile, 'utf8'));
