@@ -40,8 +40,8 @@ export function serializeMarkdownDocument(data, body) {
   return `---\n${stringify(data).trimEnd()}\n---\n\n${body.replace(/^\s+/, '')}`;
 }
 
-export function markdownSections(body) {
-  const sections = [];
+function markdownLinesOutsideFences(body) {
+  const lines = [];
   let fence;
   let offset = 0;
   for (const match of body.matchAll(/.*(?:\n|$)/g)) {
@@ -71,6 +71,17 @@ export function markdownSections(body) {
       continue;
     }
 
+    lines.push({ line, lineWithEnding, offset });
+    offset += lineWithEnding.length;
+  }
+  return lines;
+}
+
+export function markdownSections(body) {
+  const sections = [];
+  for (const { line, lineWithEnding, offset } of markdownLinesOutsideFences(
+    body,
+  )) {
     const heading = line.match(/^ {0,3}##(?!#)\s+(.+?)\s*#*\s*$/);
     if (heading) {
       if (sections.length > 0) {
@@ -83,7 +94,12 @@ export function markdownSections(body) {
         end: body.length,
       });
     }
-    offset += lineWithEnding.length;
   }
   return sections;
+}
+
+export function hasMarkdownListItemOutsideFences(body) {
+  return markdownLinesOutsideFences(body).some(({ line }) =>
+    /^ {0,3}(?:[-*+]\s+|\d+\.\s+)\S/.test(line),
+  );
 }

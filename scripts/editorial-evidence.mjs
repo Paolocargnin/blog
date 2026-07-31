@@ -6,6 +6,7 @@ import { contentContract } from '../src/content/contract.mjs';
 import { editorialWorkflowContract } from '../src/editorial/contract.mjs';
 import { locateWorkingArticle, pathExists } from './editorial-paths.mjs';
 import {
+  hasMarkdownListItemOutsideFences,
   isIsoDate,
   isPlainObject,
   markdownSections,
@@ -163,7 +164,7 @@ function publicationCheckErrors(
     if (articleSections.at(-1) !== sources) {
       errors.push(`${filePath}: the public ## Sources section must be last.`);
     }
-    if (!/^\s*(?:[-*+]\s+|\d+\.\s+)\S/m.test(sourceEntries)) {
+    if (!hasMarkdownListItemOutsideFences(sourceEntries)) {
       errors.push(
         `${filePath}: the public ## Sources section must contain at least one source list entry.`,
       );
@@ -225,12 +226,16 @@ export async function candidateSnapshot({ workspace, slug }) {
   const articleSource = await readFile(articleFile, utf8);
   const sourcesSource = (await pathExists(sourcesFile))
     ? await readFile(sourcesFile, utf8)
-    : '<absent>';
+    : null;
   const digest = createHash('sha256')
-    .update(`editorial-workflow:${editorialWorkflowContract.version}\0`)
-    .update(`slug\0${slug}\0`)
-    .update(`article.md\0${articleSource}\0`)
-    .update(`sources.md\0${sourcesSource}`)
+    .update(
+      JSON.stringify({
+        workflowVersion: editorialWorkflowContract.version,
+        slug,
+        articleSource,
+        sourcesSource,
+      }),
+    )
     .digest('hex');
   return { articleSource, digest };
 }

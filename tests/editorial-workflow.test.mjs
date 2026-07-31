@@ -12,7 +12,10 @@ import {
   validatePublicationEvidence,
 } from '../scripts/editorial-lib.mjs';
 import { scaffoldWorkspace } from '../scripts/workspace-lib.mjs';
-import { markdownSections } from '../scripts/markdown-lib.mjs';
+import {
+  hasMarkdownListItemOutsideFences,
+  markdownSections,
+} from '../scripts/markdown-lib.mjs';
 
 const temporaryDirectories = [];
 
@@ -94,6 +97,32 @@ describe('editorial workflow', () => {
         '```markdown\n## Sources\n```\n\n## AI disclosure\n\nMaterial assistance.\n',
       ).map((section) => section.title),
     ).toEqual(['AI disclosure']);
+    expect(
+      hasMarkdownListItemOutsideFences(
+        '```text\n- not a rendered source\n```\n',
+      ),
+    ).toBe(false);
+    expect(
+      hasMarkdownListItemOutsideFences(
+        '- [Rendered source](https://example.com/source)\n',
+      ),
+    ).toBe(true);
+  });
+
+  it('distinguishes an absent source ledger from every present ledger', async () => {
+    const { workspace } = await temporaryProject();
+    const candidate = await createCandidate(workspace);
+    await writeFile(path.join(candidate, 'sources.md'), '<absent>', 'utf8');
+    const presentDigest = await candidateDigest({
+      workspace,
+      slug: 'candidate',
+    });
+    await rm(path.join(candidate, 'sources.md'));
+    const absentDigest = await candidateDigest({
+      workspace,
+      slug: 'candidate',
+    });
+    expect(presentDigest).not.toBe(absentDigest);
   });
 
   it('creates each review sidecar once and only in its valid lifecycle', async () => {
