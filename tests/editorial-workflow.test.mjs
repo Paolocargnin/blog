@@ -104,6 +104,16 @@ describe('editorial workflow', () => {
     ).toBe(false);
     expect(
       hasMarkdownListItemOutsideFences(
+        '```text\n```still code\n- not a rendered source\n```\n',
+      ),
+    ).toBe(false);
+    expect(
+      hasMarkdownListItemOutsideFences(
+        '```text\n    ```\n- not a rendered source\n```\n',
+      ),
+    ).toBe(false);
+    expect(
+      hasMarkdownListItemOutsideFences(
         '- [Rendered source](https://example.com/source)\n',
       ),
     ).toBe(true);

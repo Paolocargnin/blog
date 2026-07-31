@@ -50,12 +50,13 @@ function markdownLinesOutsideFences(body) {
       continue;
     }
     const line = lineWithEnding.replace(/\r?\n$/, '');
-    const fenceMatch = line.match(/^\s*(`{3,}|~{3,})/);
+    const fenceMatch = line.match(/^ {0,3}(`{3,}|~{3,})/);
     if (fence) {
+      const closingFence = line.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
       if (
-        fenceMatch &&
-        fenceMatch[1][0] === fence.character &&
-        fenceMatch[1].length >= fence.length
+        closingFence &&
+        closingFence[1][0] === fence.character &&
+        closingFence[1].length >= fence.length
       ) {
         fence = undefined;
       }
