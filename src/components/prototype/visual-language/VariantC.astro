@@ -15,14 +15,14 @@
       <div>
         <p class="c-label" id="c-manifest-title">Direction C / Editorial index</p>
         <p>
-          A fast, high-contrast index wraps a deliberately slow reading column. The mono does the
-          cataloguing; the serif is reserved for sustained attention.
+          A fast, high-contrast index wraps one centered reading column. JetBrains Mono carries
+          every role; scale, weight, space, and acid green create the hierarchy.
         </p>
       </div>
       <dl>
-        <div><dt>Text / display</dt><dd>Newsreader</dd></div>
-        <div><dt>Interface</dt><dd>Manrope</dd></div>
-        <div><dt>Index / code</dt><dd>JetBrains Mono</dd></div>
+        <div><dt>Only family</dt><dd>JetBrains Mono</dd></div>
+        <div><dt>Reading</dt><dd>Centered / 58ch</dd></div>
+        <div><dt>Code</dt><dd>Wide / 80rem</dd></div>
       </dl>
     </aside>
 
@@ -37,28 +37,15 @@
 
     <article id="c-read" class="c-article">
       <header class="c-article-header">
-        <div class="c-article-number" aria-hidden="true">001</div>
-        <div>
-          <p class="c-label">SYSTEMS / 8 MIN / 31.07.2026</p>
-          <h1>Building a home for work that is still becoming</h1>
-          <p class="c-deck">
-            A public blog and a private writing room need different doors, but they can still share
-            one editorial discipline.
-          </p>
-        </div>
+        <p class="c-label">SYSTEMS / 8 MIN / 31.07.2026</p>
+        <h1>Building a home for work that is still becoming</h1>
+        <p class="c-deck">
+          A public blog and a private writing room need different doors, but they can still share
+          one editorial discipline.
+        </p>
       </header>
 
       <div class="c-reading-grid">
-        <aside class="c-contents" aria-label="Article contents">
-          <p>IN THIS POST</p>
-          <ol>
-            <li><a href="#c-boundary">The boundary</a></li>
-            <li><a href="#c-trail">The visible trail</a></li>
-            <li><a href="#c-corrections">Corrections</a></li>
-            <li><a href="#c-sources">Sources</a></li>
-          </ol>
-        </aside>
-
         <div class="c-prose">
           <p class="c-lede">
             Most publishing tools ask for the finished object too early. They offer a title field, a
@@ -155,6 +142,8 @@ Result: publication boundary intact</code></pre>
     </section>
   </main>
 
+  <div class="c-floating-number" aria-hidden="true">001</div>
+
   <footer class="c-footer" id="c-about">
     <p>PC — THE BLOG</p>
     <p>WRITTEN BY PAOLO CARGNIN<br />ATHENS / GREECE</p>
@@ -173,12 +162,16 @@ Result: publication boundary intact</code></pre>
     min-height: 100vh;
     background: var(--ground);
     color: var(--ink);
-    font-family: 'Newsreader Variable', Georgia, serif;
+    font-family: 'JetBrains Mono Variable', monospace;
   }
 
   .c-shell :is(a, pre):focus-visible {
     outline: 0.2rem solid var(--signal);
     outline-offset: 0.25rem;
+  }
+
+  .c-shell code {
+    font-family: inherit;
   }
 
   .c-header {
@@ -189,7 +182,7 @@ Result: publication boundary intact</code></pre>
     min-height: 5.5rem;
     padding-inline: 2rem;
     border-bottom: 1px solid var(--line);
-    font: 600 0.6875rem/1.3 'Manrope Variable', sans-serif;
+    font: 600 0.6875rem/1.3 'JetBrains Mono Variable', monospace;
     letter-spacing: 0.05em;
   }
 
@@ -222,7 +215,6 @@ Result: publication boundary intact</code></pre>
   .c-header nav a,
   .c-footer a,
   .c-ticker a,
-  .c-contents a,
   .c-sources a,
   .c-archive a {
     color: inherit;
@@ -251,7 +243,7 @@ Result: publication boundary intact</code></pre>
     padding: 3rem max(2rem, calc((100vw - 88rem) / 2));
     border-bottom: 1px solid var(--line);
     background: var(--panel);
-    font: 500 0.75rem/1.6 'Manrope Variable', sans-serif;
+    font: 500 0.75rem/1.6 'JetBrains Mono Variable', monospace;
   }
 
   .c-manifest > div > p:last-child {
@@ -329,75 +321,38 @@ Result: publication boundary intact</code></pre>
   }
 
   .c-article-header {
-    display: grid;
-    grid-template-columns: minmax(8rem, 1fr) minmax(20rem, 4fr);
-    gap: clamp(2rem, 8vw, 10rem);
-    max-width: 88rem;
+    max-width: 50rem;
     margin-inline: auto;
     padding: clamp(5rem, 10vw, 10rem) 2rem 6rem;
   }
 
-  .c-article-number {
-    color: var(--signal);
-    font: 450 clamp(4rem, 8vw, 8rem)/0.8 'JetBrains Mono Variable', monospace;
-    letter-spacing: -0.1em;
-  }
-
   .c-article-header h1 {
-    max-width: 12ch;
+    max-width: 11ch;
     margin: 0;
-    font-size: clamp(3.5rem, 2.5rem + 5vw, 8.5rem);
-    font-variation-settings: 'opsz' 72, 'wght' 430;
-    font-weight: 430;
+    font-size: clamp(3.5rem, 2.5rem + 5vw, 7rem);
+    font-variation-settings: 'wght' 420;
+    font-weight: 420;
     letter-spacing: -0.055em;
-    line-height: 0.88;
+    line-height: 0.92;
     text-wrap: balance;
   }
 
   .c-deck {
-    max-width: 42rem;
+    max-width: 58ch;
     margin: 3rem 0 0;
     color: var(--muted);
-    font: 500 clamp(1.1rem, 1rem + 0.45vw, 1.45rem)/1.45 'Manrope Variable', sans-serif;
+    font: 500 clamp(1rem, 0.95rem + 0.3vw, 1.25rem)/1.55 'JetBrains Mono Variable', monospace;
   }
 
   .c-reading-grid {
-    display: grid;
-    grid-template-columns: minmax(10rem, 16rem) minmax(20rem, 42rem) minmax(2rem, 1fr);
-    gap: clamp(2rem, 5vw, 6rem);
     max-width: 88rem;
     margin-inline: auto;
     padding: 2rem 2rem 7rem;
   }
 
-  .c-contents {
-    position: sticky;
-    top: 2rem;
-    align-self: start;
-    padding-top: 1rem;
-    border-top: 1px solid var(--line);
-    font: 500 0.6875rem/1.5 'JetBrains Mono Variable', monospace;
-  }
-
-  .c-contents > p {
-    margin: 0 0 1rem;
-    color: var(--signal);
-  }
-
-  .c-contents ol {
-    display: grid;
-    gap: 0.65rem;
-    margin: 0;
-    padding: 0;
-    list-style: decimal-leading-zero inside;
-  }
-
-  .c-contents li::marker {
-    color: var(--muted);
-  }
-
   .c-prose {
-    grid-column: 2;
+    max-width: 58ch;
+    margin-inline: auto;
     font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
     line-height: 1.72;
   }
@@ -418,7 +373,7 @@ Result: publication boundary intact</code></pre>
   .c-prose h2 {
     margin-top: 3em;
     font-size: clamp(2rem, 1.5rem + 1.3vw, 3.4rem);
-    font-variation-settings: 'opsz' 42;
+    font-variation-settings: 'wght' 500;
     font-weight: 500;
     letter-spacing: -0.035em;
     line-height: 1;
@@ -432,8 +387,7 @@ Result: publication boundary intact</code></pre>
   }
 
   .c-prose blockquote {
-    margin-inline: -3rem;
-    padding: 2rem 3rem;
+    padding: 2rem 0;
     border-block: 1px solid var(--signal);
     color: var(--signal);
     font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.6rem);
@@ -446,8 +400,8 @@ Result: publication boundary intact</code></pre>
   }
 
   .c-code {
-    grid-column: 1 / -1;
-    margin-block: 3rem;
+    max-width: 80rem;
+    margin: 3rem auto;
     border: 1px solid var(--line);
     background: #090a0b;
   }
@@ -483,7 +437,7 @@ Result: publication boundary intact</code></pre>
   }
 
   .c-prose-second {
-    grid-column: 2;
+    margin-inline: auto;
   }
 
   .c-corrections,
@@ -491,7 +445,9 @@ Result: publication boundary intact</code></pre>
     display: grid;
     grid-template-columns: minmax(12rem, 1fr) minmax(20rem, 3fr);
     gap: clamp(2rem, 8vw, 8rem);
-    padding: 4rem max(2rem, calc((100vw - 88rem) / 2));
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 4rem 2rem;
     border-top: 1px solid var(--line);
   }
 
@@ -512,7 +468,7 @@ Result: publication boundary intact</code></pre>
     padding: 1.25rem;
     border: 1px solid var(--signal);
     color: var(--ink);
-    font: 500 0.8rem/1.6 'Manrope Variable', sans-serif;
+    font: 500 0.8rem/1.6 'JetBrains Mono Variable', monospace;
   }
 
   .c-corrections article time,
@@ -583,11 +539,27 @@ Result: publication boundary intact</code></pre>
     gap: 2rem;
     padding: 2rem;
     border-top: 1px solid var(--line);
-    font: 550 0.65rem/1.5 'Manrope Variable', sans-serif;
+    font: 550 0.65rem/1.5 'JetBrains Mono Variable', monospace;
   }
 
   .c-footer p {
     margin: 0;
+  }
+
+  .c-floating-number {
+    position: fixed;
+    z-index: 50;
+    inset-block-end: clamp(0.75rem, 2vw, 1.75rem);
+    inset-inline-start: clamp(1rem, 3vw, 3rem);
+    color: var(--signal);
+    font-size: clamp(6rem, 14vw, 12rem);
+    font-variation-settings: 'wght' 520;
+    font-weight: 520;
+    letter-spacing: -0.12em;
+    line-height: 0.68;
+    mix-blend-mode: exclusion;
+    pointer-events: none;
+    user-select: none;
   }
 
   @media (max-width: 58rem) {
@@ -600,23 +572,9 @@ Result: publication boundary intact</code></pre>
     }
 
     .c-manifest,
-    .c-article-header,
     .c-corrections,
     .c-sources {
       grid-template-columns: 1fr;
-    }
-
-    .c-reading-grid {
-      grid-template-columns: minmax(8rem, 12rem) minmax(18rem, 40rem);
-    }
-
-    .c-prose,
-    .c-prose-second {
-      grid-column: 2;
-    }
-
-    .c-code {
-      grid-column: 1 / -1;
     }
 
     .c-corrections article {
@@ -668,21 +626,7 @@ Result: publication boundary intact</code></pre>
       padding-block: 5rem 3rem;
     }
 
-    .c-article-number {
-      font-size: 3rem;
-    }
-
-    .c-reading-grid {
-      display: block;
-    }
-
-    .c-contents {
-      position: static;
-      margin-bottom: 3rem;
-    }
-
     .c-prose blockquote {
-      margin-inline: 0;
       padding-inline: 1.25rem;
     }
 
@@ -706,6 +650,12 @@ Result: publication boundary intact</code></pre>
 
     .c-footer p:nth-child(2) {
       display: none;
+    }
+
+    .c-floating-number {
+      inset-block-end: 1rem;
+      inset-inline-start: 1rem;
+      font-size: clamp(5.5rem, 28vw, 8rem);
     }
   }
 </style>
