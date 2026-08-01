@@ -12,6 +12,17 @@ describe('reading surfaces', () => {
     expect(layout).toContain("'JetBrains Mono Variable'");
   });
 
+  it('keeps canonical, social, structured, and production-only analytics metadata in the layout', async () => {
+    const layout = await read('src/layouts/BaseLayout.astro');
+
+    expect(layout).toContain('rel="canonical"');
+    expect(layout).toContain('application/rss+xml');
+    expect(layout).toContain('property="og:title"');
+    expect(layout).toContain('application/ld+json');
+    expect(layout).toContain('import.meta.env.PROD');
+    expect(layout).toContain('PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN');
+  });
+
   it('provides the promised homepage, archive, controlled tags, Post, and 404 routes', async () => {
     const pages = await Promise.all([
       read('src/pages/index.astro'),
@@ -20,6 +31,9 @@ describe('reading surfaces', () => {
       read('src/pages/tags/index.astro'),
       read('src/pages/tags/[tag].astro'),
       read('src/pages/404.astro'),
+      read('src/pages/editorial/index.astro'),
+      read('src/pages/rss.xml.js'),
+      read('src/pages/robots.txt.ts'),
     ]);
 
     expect(pages[0]).toContain('RECENT POSTS');
@@ -29,6 +43,9 @@ describe('reading surfaces', () => {
     expect(pages[3]).toContain('controlledTagIds');
     expect(pages[4]).toContain('getStaticPaths');
     expect(pages[5]).toContain('404 / MISSING FROM THE INDEX');
+    expect(pages[6]).toContain('Editorial process');
+    expect(pages[7]).toContain('@astrojs/rss');
+    expect(pages[8]).toContain('Sitemap:');
   });
 
   it('keeps long prose and code responsive in the Post route', async () => {
