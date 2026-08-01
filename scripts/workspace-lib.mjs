@@ -7,6 +7,11 @@ import {
   validatePostFile,
   validatePublicContent,
 } from './content-contract.mjs';
+import {
+  candidateSnapshot,
+  recordPublicationApproval,
+  validatePublicationEvidence,
+} from './editorial-lib.mjs';
 import { contentContract, slugPattern } from '../src/content/contract.mjs';
 
 const utf8 = 'utf8';
@@ -29,6 +34,14 @@ export function requireHumanApproval(approvedBy) {
     );
   }
   return approvedBy.trim();
+}
+
+function requireApprovedDigest(approvedDigest, expectedDigest) {
+  if (approvedDigest !== expectedDigest) {
+    throw new Error(
+      `Human approval must name the exact candidate digest. Re-inspect the candidate and re-run with --approved-digest ${expectedDigest}.`,
+    );
+  }
 }
 
 async function exists(target) {
@@ -93,8 +106,16 @@ export async function developNote({ workspace, slug }) {
   }
 
   const source = await readFile(noteFile, utf8);
-  const article = `---\nid: ${randomUUID()}\n---\n\n${source}`;
+  const existingNotesFile = path.join(noteDirectory, 'notes.md');
+  const existingNotes = (await exists(existingNotesFile))
+    ? await readFile(existingNotesFile, utf8)
+    : '';
+  const preservedNotes = existingNotes.trim()
+    ? `${existingNotes.trimEnd()}\n\n---\n\n${source}`
+    : source;
+  const article = `---\nid: ${randomUUID()}\n---\n`;
   await rename(noteDirectory, draftDirectory);
+  await writeFile(path.join(draftDirectory, 'notes.md'), preservedNotes, utf8);
   await writeFile(
     path.join(draftDirectory, contentContract.workspace.articleFile),
     article,
@@ -103,7 +124,12 @@ export async function developNote({ workspace, slug }) {
   return draftDirectory;
 }
 
-export async function promoteDraft({ workspace, slug, approvedBy }) {
+export async function promoteDraft({
+  workspace,
+  postsDirectory,
+  slug,
+  approvedBy,
+}) {
   requireHumanApproval(approvedBy);
   const draftDirectory = articleDirectory(workspace, 'drafts', slug);
   const candidateDirectory = articleDirectory(
@@ -120,6 +146,11 @@ export async function promoteDraft({ workspace, slug, approvedBy }) {
     throw new Error(`${candidateDirectory} already exists.`);
   }
   await validateContent({ workspaceDirectory: workspace });
+  await validatePostFile(
+    path.join(draftDirectory, contentContract.workspace.articleFile),
+    slug,
+    postsDirectory,
+  );
   await rename(draftDirectory, candidateDirectory);
   return candidateDirectory;
 }
@@ -129,6 +160,7 @@ export async function publishCandidate({
   postsDirectory,
   slug,
   approvedBy,
+  approvedDigest,
 }) {
   requireHumanApproval(approvedBy);
   const candidateDirectory = articleDirectory(
@@ -151,10 +183,19 @@ export async function publishCandidate({
   }
 
   await validateContent({ workspaceDirectory: workspace });
+  await validatePublicationEvidence({ workspace, slug });
   await validatePublicContent({ postsDirectory });
   await validatePostFile(candidateFile, slug, postsDirectory);
+  const snapshot = await candidateSnapshot({ workspace, slug });
+  requireApprovedDigest(approvedDigest, snapshot.digest);
+  await recordPublicationApproval({
+    workspace,
+    slug,
+    approvedBy: approvedBy.trim(),
+    approvedDigest,
+  });
   await mkdir(postsDirectory, { recursive: true });
-  await writeFile(postFile, await readFile(candidateFile, utf8), utf8);
+  await writeFile(postFile, snapshot.articleSource, utf8);
   return postFile;
 }
 

@@ -1,7 +1,6 @@
 import { readdir, readFile, realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parse } from 'yaml';
 
 import {
   contentContract,
@@ -9,13 +8,17 @@ import {
   slugPattern,
   stableIdPattern,
 } from '../src/content/contract.mjs';
+import {
+  isIsoDate as isDate,
+  isPlainObject,
+  parseMarkdownDocument,
+} from './markdown-lib.mjs';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
 );
 const markdownExtension = '.md';
-const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
 export class ContentContractError extends Error {
   constructor(errors) {
@@ -44,39 +47,12 @@ async function accessPath(target) {
   await stat(target);
 }
 
-function isPlainObject(value) {
-  return value !== null && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isDate(value) {
-  if (typeof value !== 'string' || !datePattern.test(value)) {
-    return false;
-  }
-  const parsed = new Date(`${value}T00:00:00Z`);
-  return (
-    !Number.isNaN(parsed.valueOf()) &&
-    parsed.toISOString().slice(0, 10) === value
-  );
-}
-
 async function readMarkdown(filePath, errors) {
   const source = await readFile(filePath, 'utf8');
-  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
-
-  if (!match) {
-    errors.push(`${filePath}: frontmatter is required.`);
-    return { data: {}, body: source };
-  }
-
   try {
-    const data = parse(match[1]);
-    if (!isPlainObject(data)) {
-      errors.push(`${filePath}: frontmatter must be a mapping.`);
-      return { data: {}, body: source.slice(match[0].length) };
-    }
-    return { data, body: source.slice(match[0].length) };
+    return parseMarkdownDocument(source, filePath);
   } catch (error) {
-    errors.push(`${filePath}: invalid YAML frontmatter (${error.message}).`);
+    errors.push(error.message);
     return { data: {}, body: source };
   }
 }

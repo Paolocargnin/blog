@@ -31,17 +31,34 @@ create them locally as needed.
 ```sh
 pnpm workspace:create -- --slug an-article-idea
 pnpm workspace:develop -- --slug an-article-idea
+pnpm editorial:create -- --slug an-article-idea --kind brief
+pnpm editorial:create -- --slug an-article-idea --kind sources
 pnpm workspace:validate
 pnpm workspace:promote -- --slug an-article-idea --approved-by "Paolo Cargnin"
-pnpm workspace:publish -- --slug an-article-idea --approved-by "Paolo Cargnin"
+pnpm editorial:status -- --slug an-article-idea
+pnpm editorial:check -- --slug an-article-idea
+pnpm editorial:digest -- --slug an-article-idea
+pnpm workspace:publish -- --slug an-article-idea --approved-by "Paolo Cargnin" --approved-digest <digest>
+pnpm workspace:return -- --slug an-article-idea
 ```
 
-`workspace:create` creates a raw Note. `workspace:develop` moves it to a Draft
-and assigns its stable UUID. `workspace:promote` moves a Draft to a Publication
-candidate only after the named human explicitly approves it. `workspace:publish`
-copies a complete candidate to `src/content/posts/` only after the named human
-explicitly approves it; it never overwrites a Post and still requires a
-reviewed publication pull request before merge.
+`workspace:create` creates a raw Note. `workspace:develop` preserves its raw
+fragments in `notes.md`, creates the Draft `article.md`, and assigns its stable
+UUID. `workspace:promote` validates a content-complete Draft and moves it to a
+Publication candidate only after the named human explicitly approves it.
+`workspace:publish` rechecks the independent fact-check, resolved
+counter-discussion, public Sources proposal, and publication package before it
+copies an approved candidate to `src/content/posts/`. The approved digest binds
+the named human decision and every review record to the exact candidate and
+optional private ledger; any later edit makes approval stale. The command never
+overwrites a Post and still requires a reviewed publication pull request before
+merge.
+
+`workspace:return` moves a candidate back to Draft when substantive work is
+needed and invalidates its review evidence. Use `$blog-workflow` or
+`pnpm editorial:status` when the next stage is unclear. See the
+[editorial skill suite](editorial-skills.md) for the full router and evidence
+contract.
 
 The approval flag is intentionally not a shorthand for agent approval. An AI
 must stop and ask a human to inspect the work and run or expressly authorize

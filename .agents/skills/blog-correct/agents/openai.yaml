@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Correct"
+  short_description: "Prepare a transparent Post correction"
+  default_prompt: "Use $blog-correct to prepare a safe correction or revision to this Post."
+policy:
+  allow_implicit_invocation: false

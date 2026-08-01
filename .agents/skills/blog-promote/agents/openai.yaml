@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Promote"
+  short_description: "Promote a complete approved Draft"
+  default_prompt: "Use $blog-promote to prepare this complete Draft as a Publication candidate."
+policy:
+  allow_implicit_invocation: false

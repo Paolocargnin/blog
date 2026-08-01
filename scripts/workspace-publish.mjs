@@ -11,6 +11,7 @@ const postFile = await publishCandidate({
   postsDirectory: postsFromOptions(options),
   slug: options.get('--slug'),
   approvedBy: options.get('--approved-by'),
+  approvedDigest: options.get('--approved-digest'),
 });
 console.log(
   `Prepared Post at ${postFile}; commit it through a publication PR.`,

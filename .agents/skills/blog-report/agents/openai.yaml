@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Report"
+  short_description: "Build the private source ledger"
+  default_prompt: "Use $blog-report to report this Draft and build its private source ledger."
+policy:
+  allow_implicit_invocation: false

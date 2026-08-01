@@ -1,0 +1,6 @@
+interface:
+  display_name: "Blog Publish"
+  short_description: "Prepare an approved publication PR"
+  default_prompt: "Use $blog-publish to prepare this approved Publication candidate as a pull request."
+policy:
+  allow_implicit_invocation: false

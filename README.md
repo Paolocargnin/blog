@@ -21,3 +21,7 @@ install`.
 
 See [the private Workspace guide](docs/workspace.md) for setup, lifecycle,
 sync, recovery, and sensitive-source boundaries.
+
+Use `$blog-workflow` when an article's next editorial step is unclear. The
+[editorial skill suite](docs/editorial-skills.md) documents the router, review
+evidence, human gates, and deterministic lifecycle commands.

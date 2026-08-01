@@ -12,8 +12,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "format": "prettier --check README.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
-    "format:write": "prettier --write README.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
+    "format": "prettier --check README.md docs/editorial-skills.md docs/workspace.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
+    "format:write": "prettier --write README.md docs/editorial-skills.md docs/workspace.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
     "type-check": "astro check",
     "test": "vitest run",
     "content:check": "node ./scripts/content-check.mjs",
@@ -24,7 +24,14 @@
     "workspace:validate": "node ./scripts/workspace-validate.mjs",
     "workspace:promote": "node ./scripts/workspace-promote.mjs",
     "workspace:publish": "node ./scripts/workspace-publish.mjs",
-    "quality": "pnpm format && pnpm type-check && pnpm test && pnpm content:check && pnpm build"
+    "workspace:return": "node ./scripts/workspace-return.mjs",
+    "editorial:create": "node ./scripts/editorial-create.mjs",
+    "editorial:status": "node ./scripts/editorial-status.mjs",
+    "editorial:check": "node ./scripts/editorial-check.mjs",
+    "editorial:digest": "node ./scripts/editorial-digest.mjs",
+    "post:correct": "node ./scripts/post-correct.mjs",
+    "skills:check": "node ./scripts/skill-check.mjs",
+    "quality": "pnpm format && pnpm type-check && pnpm test && pnpm skills:check && pnpm content:check && pnpm build"
   },
   "dependencies": {
     "astro": "^7.1.6",
