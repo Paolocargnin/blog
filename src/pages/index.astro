@@ -1,24 +1,112 @@
 ---
-const siteName = 'PC - the blog';
+import { getCollection } from 'astro:content';
+
+import PostCard from '../components/PostCard.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sortPostsNewestFirst } from '../lib/posts';
+
+const posts = sortPostsNewestFirst(await getCollection('posts'));
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{siteName}</title>
-  </head>
-  <body>
-    <header>
-      <nav aria-label="Primary navigation">
-        <a href="/" aria-current="page">{siteName}</a>
-      </nav>
-    </header>
-    <main>
-      <h1>{siteName}</h1>
-      <p>A public home for writing in progress.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="PC - the blog" description="A public home for Paolo Cargnin's writing.">
+  <SiteHeader slot="header" currentPath={Astro.url.pathname} />
+  <section class="intro" id="top">
+    <p>PC — THE BLOG</p>
+    <h1>Writing with a visible trail.</h1>
+    <p>A public body of published work, kept separate from the private work that makes it possible.</p>
+  </section>
+  <section class="latest" aria-labelledby="latest-title">
+    <div class="section-heading">
+      <p>RECENT POSTS / {String(posts.length).padStart(2, '0')}</p>
+      <h2 id="latest-title">Read</h2>
+    </div>
+    {
+      posts.length > 0 ? (
+        <div>{posts.map((post, index) => <PostCard post={post} index={index + 1} />)}</div>
+      ) : (
+        <p class="empty">The index is quiet for now. Published Posts will appear here.</p>
+      )
+    }
+  </section>
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<style>
+  .intro,
+  .latest {
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2rem);
+  }
+
+  .intro {
+    min-height: min(42rem, 70vh);
+    padding-block: clamp(5rem, 14vw, 12rem) clamp(4rem, 8vw, 7rem);
+  }
+
+  .intro > p:first-child,
+  .section-heading > p {
+    margin: 0 0 1rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  h1,
+  h2 {
+    margin: 0;
+    font-weight: 450;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+  }
+
+  h1 {
+    max-width: 13ch;
+    font-size: clamp(3.7rem, 9vw, 9.5rem);
+  }
+
+  .intro > p:last-child {
+    max-width: 54ch;
+    margin: 2rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .latest {
+    padding-bottom: clamp(4rem, 9vw, 8rem);
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: 40% auto;
+    gap: 1.5rem;
+    align-items: end;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-heading > p {
+    margin: 0;
+  }
+
+  h2 {
+    font-size: clamp(2.7rem, 5vw, 5.5rem);
+  }
+
+  .empty {
+    max-width: 48ch;
+    margin: 2rem 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 42rem) {
+    .section-heading {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

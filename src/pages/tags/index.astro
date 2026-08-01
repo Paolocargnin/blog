@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { controlledTagIds } from '../../content/contract.mjs';
+import { postsWithTag, tagLabel } from '../../lib/posts';
+
+const posts = await getCollection('posts');
+---
+
+<BaseLayout title="Tags" description="Controlled topics across published Posts.">
+  <SiteHeader slot="header" currentPath={Astro.url.pathname} />
+  <section class="tags" id="top" aria-labelledby="tags-title">
+    <p>CONTROLLED VOCABULARY</p>
+    <h1 id="tags-title">Tags</h1>
+    <ul>
+      {
+        controlledTagIds.map((tag) => (
+          <li>
+            <a href={`/tags/${tag}/`}>
+              <span>{tagLabel(tag)}</span>
+              <small>{String(postsWithTag(posts, tag).length).padStart(2, '0')} POSTS</small>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<style>
+  .tags {
+    max-width: 88rem;
+    min-height: 70vh;
+    margin-inline: auto;
+    padding: clamp(4rem, 9vw, 9rem) clamp(1rem, 4vw, 2rem);
+  }
+
+  .tags > p {
+    margin: 0 0 1rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    margin: 0 0 clamp(3rem, 7vw, 6rem);
+    font-size: clamp(3.7rem, 9vw, 9.5rem);
+    font-weight: 450;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    border-top: 1px solid var(--line);
+  }
+
+  li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.25rem;
+    text-decoration: none;
+  }
+
+  li a:hover span {
+    color: var(--signal);
+  }
+
+  span {
+    font-size: clamp(1.6rem, 1.3rem + 1.5vw, 3rem);
+    font-weight: 460;
+    letter-spacing: -0.05em;
+  }
+
+  small {
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+</style>

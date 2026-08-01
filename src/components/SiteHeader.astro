@@ -1,0 +1,93 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+const navigation = [
+  { href: '/', label: 'Read' },
+  { href: '/posts/', label: 'Index' },
+  { href: '/tags/', label: 'Tags' },
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="PC - the blog home"><span>PC</span> THE BLOG</a>
+  <nav aria-label="Primary navigation">
+    {
+      navigation.map(({ href, label }) => (
+        <a href={href} aria-current={currentPath === href ? 'page' : undefined}>{label}</a>
+      ))
+    }
+  </nav>
+  <p>ISSUE 001<br />ATHENS · 2026</p>
+</header>
+
+<style>
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 5.5rem;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1.35;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+
+  .brand span {
+    display: grid;
+    width: 2.75rem;
+    aspect-ratio: 1;
+    place-items: center;
+    background: var(--signal);
+    color: var(--ground);
+    font-size: 1.35rem;
+    font-weight: 850;
+    letter-spacing: -0.08em;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  nav a {
+    text-decoration: none;
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--signal);
+  }
+
+  .site-header > p {
+    margin: 0;
+    color: var(--muted);
+    text-align: end;
+  }
+
+  @media (max-width: 42rem) {
+    .site-header {
+      grid-template-columns: 1fr auto;
+      padding-block: 0.85rem;
+    }
+
+    nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-content: start;
+    }
+  }
+</style>

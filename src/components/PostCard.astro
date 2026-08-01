@@ -1,0 +1,85 @@
+---
+import { formatDate, type Post } from '../lib/posts';
+
+interface Props {
+  index: number;
+  post: Post;
+}
+
+const { index, post } = Astro.props;
+---
+
+<article class="post-card">
+  <p class="post-number" aria-hidden="true">{String(index).padStart(3, '0')}</p>
+  <div>
+    <p class="post-meta"><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time></p>
+    <h2><a href={`/posts/${post.id}/`}>{post.data.title}</a></h2>
+    <p class="description">{post.data.description}</p>
+  </div>
+  <ul aria-label={`Tags for ${post.data.title}`}>
+    {post.data.tags.map((tag) => <li><a href={`/tags/${tag}/`}>{tag}</a></li>)}
+  </ul>
+</article>
+
+<style>
+  .post-card {
+    display: grid;
+    grid-template-columns: minmax(3rem, 8%) 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .post-number,
+  .post-meta,
+  ul {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  h2 {
+    max-width: 24ch;
+    margin: 0.5rem 0 1rem;
+    font-size: clamp(1.7rem, 1.3rem + 1.5vw, 3rem);
+    font-weight: 460;
+    letter-spacing: -0.05em;
+    line-height: 0.98;
+  }
+
+  .description {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 0.5rem;
+    max-width: 16rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  li a {
+    color: var(--signal);
+  }
+
+  @media (max-width: 42rem) {
+    .post-card {
+      grid-template-columns: 3rem 1fr;
+    }
+
+    ul {
+      grid-column: 2;
+      justify-content: start;
+    }
+  }
+</style>

@@ -1,0 +1,185 @@
+---
+import { getCollection, render } from 'astro:content';
+
+import Corrections from '../../components/Corrections.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, tagLabel } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <SiteHeader slot="header" currentPath={Astro.url.pathname} />
+  <article id="top">
+    <header class="article-header">
+      <p class="article-meta">
+        {post.data.tags.map(tagLabel).join(' / ')} / <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+      </p>
+      <h1>{post.data.title}</h1>
+      <p class="deck">{post.data.description}</p>
+      {post.data.updatedAt && <p class="updated">Updated {formatDate(post.data.updatedAt)}</p>}
+    </header>
+    <div class="prose"><Content /></div>
+    <Corrections corrections={post.data.corrections} />
+  </article>
+  <script>
+    document.querySelectorAll<HTMLElement>('.prose pre').forEach((codeBlock) => {
+      codeBlock.tabIndex = 0;
+      codeBlock.setAttribute(
+        'aria-label',
+        'Code sample. Use arrow keys to scroll when needed.',
+      );
+    });
+  </script>
+  <div class="floating-number" aria-hidden="true">001</div>
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<style>
+  .article-header {
+    max-width: 70rem;
+    margin-inline: auto;
+    padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 4vw, 2rem) 3rem;
+  }
+
+  .article-meta,
+  .updated {
+    margin: 0 0 1rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3.575rem, 12.6vw, 10.8rem);
+    font-weight: 430;
+    letter-spacing: -0.065em;
+    line-height: 0.89;
+    text-wrap: balance;
+  }
+
+  .deck {
+    max-width: 58ch;
+    margin: 2.5rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.25rem);
+    line-height: 1.6;
+  }
+
+  .updated {
+    margin-top: 1.5rem;
+    color: var(--muted);
+  }
+
+  .prose {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding: 0 clamp(1rem, 4vw, 2rem) clamp(3rem, 8vw, 7rem);
+    font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.28rem);
+    line-height: 1.74;
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol),
+  .prose :global(blockquote),
+  .prose :global(pre) {
+    margin-block: 0 1.65em;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin: 3em 0 0.7em;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+
+  .prose :global(h2) {
+    font-size: clamp(2rem, 1.5rem + 1.3vw, 3.5rem);
+  }
+
+  .prose :global(h2#sources) {
+    padding-top: 1.5em;
+    border-top: 1px solid var(--line);
+    color: var(--signal);
+  }
+
+  .prose :global(h2#sources + ul),
+  .prose :global(h2#sources + ol) {
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    font-size: 0.84em;
+    line-height: 1.7;
+  }
+
+  .prose :global(h3) {
+    font-size: clamp(1.4rem, 1.2rem + 0.8vw, 2rem);
+  }
+
+  .prose :global(blockquote) {
+    padding: 1.5em 0;
+    border-block: 1px solid var(--signal);
+    color: var(--signal);
+    font-size: 1.3em;
+    line-height: 1.35;
+  }
+
+  .prose :global(pre) {
+    width: min(80rem, calc(100vw - 2rem));
+    margin-inline: 50%;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    background: #090a0b;
+    color: var(--ink);
+    font-size: 0.78em;
+    line-height: 1.7;
+    transform: translateX(-50%);
+  }
+
+  .prose :global(code) {
+    font-family: inherit;
+  }
+
+  .prose :global(:not(pre) > code) {
+    padding: 0.1em 0.25em;
+    background: var(--panel);
+  }
+
+  .prose :global(img) {
+    margin: 2em auto;
+  }
+
+  .floating-number {
+    position: fixed;
+    z-index: 1;
+    inset-inline-start: clamp(0.25rem, 1vw, 1rem);
+    inset-block-end: -0.18em;
+    pointer-events: none;
+    color: var(--signal);
+    font-size: clamp(3.575rem, 18.2vw, 10.8rem);
+    font-weight: 700;
+    letter-spacing: -0.13em;
+    line-height: 0.8;
+    mix-blend-mode: exclusion;
+  }
+
+  @media (min-width: 43rem) {
+    h1 {
+      font-size: clamp(5.4rem, 12.6vw, 10.8rem);
+    }
+  }
+</style>
