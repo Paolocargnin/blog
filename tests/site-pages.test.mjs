@@ -25,7 +25,7 @@ describe('reading surfaces', () => {
     expect(pages[0]).toContain('RECENT POSTS');
     expect(pages[1]).toContain('ALL POSTS');
     expect(pages[2]).toContain('<Corrections');
-    expect(pages[2]).toContain('h2#sources');
+    expect(pages[2]).toContain(':global(.sources)');
     expect(pages[3]).toContain('controlledTagIds');
     expect(pages[4]).toContain('getStaticPaths');
     expect(pages[5]).toContain('404 / MISSING FROM THE INDEX');
@@ -38,5 +38,16 @@ describe('reading surfaces', () => {
     expect(page).toContain('width: min(80rem, calc(100vw - 2rem))');
     expect(page).toContain('codeBlock.tabIndex = 0');
     expect(page).toContain('mix-blend-mode: exclusion');
+  });
+
+  it('enhances public Markdown Sources into the Corrections-style semantic region', async () => {
+    const page = await read('src/pages/posts/[...slug].astro');
+
+    expect(page).toContain(
+      "sources.setAttribute('aria-labelledby', 'sources-title')",
+    );
+    expect(page).toContain(
+      "EVIDENCE / ${String(sourceCount).padStart(2, '0')}",
+    );
   });
 });
