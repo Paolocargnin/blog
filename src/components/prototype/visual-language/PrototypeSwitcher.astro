@@ -1,0 +1,157 @@
+---
+interface Variant {
+  key: string;
+  name: string;
+}
+
+interface Props {
+  variants: Variant[];
+}
+
+const { variants } = Astro.props;
+const fallback = variants[0];
+const previous = variants.at(-1)!;
+const next = variants[1];
+---
+
+<aside
+  class="prototype-switcher"
+  aria-label="Prototype variant switcher"
+  data-prototype-switcher
+  data-variants={JSON.stringify(variants)}
+>
+  <a
+    href={`?variant=${previous.key}`}
+    aria-label={`Show previous variant: ${previous.name}`}
+    data-previous-variant
+  >
+    <span aria-hidden="true">←</span>
+  </a>
+  <p>
+    <strong data-current-key>{fallback.key}</strong><span aria-hidden="true"> — </span><span
+      data-current-name>{fallback.name}</span
+    >
+  </p>
+  <a
+    href={`?variant=${next.key}`}
+    aria-label={`Show next variant: ${next.name}`}
+    data-next-variant
+  >
+    <span aria-hidden="true">→</span>
+  </a>
+</aside>
+
+<script>
+  const switcher = document.querySelector<HTMLElement>('[data-prototype-switcher]');
+
+  if (switcher) {
+    const variants = JSON.parse(switcher.dataset.variants ?? '[]') as Array<{
+      key: string;
+      name: string;
+    }>;
+    const requested = new URL(window.location.href).searchParams.get('variant')?.toUpperCase();
+    const current = variants.some(({ key }) => key === requested) ? requested! : variants[0].key;
+    const index = variants.findIndex(({ key }) => key === current);
+    const previous = variants[(index - 1 + variants.length) % variants.length];
+    const next = variants[(index + 1) % variants.length];
+    const currentVariant = variants[index];
+    const previousLink = switcher.querySelector<HTMLAnchorElement>('[data-previous-variant]');
+    const nextLink = switcher.querySelector<HTMLAnchorElement>('[data-next-variant]');
+    const currentKey = switcher.querySelector<HTMLElement>('[data-current-key]');
+    const currentName = switcher.querySelector<HTMLElement>('[data-current-name]');
+
+    currentKey?.replaceChildren(currentVariant.key);
+    currentName?.replaceChildren(currentVariant.name);
+
+    if (previousLink) {
+      previousLink.href = `?variant=${previous.key}`;
+      previousLink.setAttribute('aria-label', `Show previous variant: ${previous.name}`);
+    }
+
+    if (nextLink) {
+      nextLink.href = `?variant=${next.key}`;
+      nextLink.setAttribute('aria-label', `Show next variant: ${next.name}`);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      const target = event.target;
+      const isEditing =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLElement && target.isContentEditable);
+
+      if (isEditing || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+
+      const offset = event.key === 'ArrowLeft' ? -1 : 1;
+      const nextIndex = (index + offset + variants.length) % variants.length;
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', variants[nextIndex].key);
+      url.hash = '';
+      window.location.assign(url);
+    });
+  }
+</script>
+
+<style>
+  .prototype-switcher {
+    position: fixed;
+    z-index: 100;
+    inset-block-end: max(1rem, env(safe-area-inset-bottom));
+    inset-inline-start: 50%;
+    display: grid;
+    grid-template-columns: 2.75rem minmax(12rem, auto) 2.75rem;
+    align-items: center;
+    width: max-content;
+    max-width: calc(100vw - 2rem);
+    border: 1px solid #fff;
+    border-radius: 999px;
+    background: #111;
+    box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 35%);
+    color: #fff;
+    font: 500 0.875rem/1.2 'Inter Variable', sans-serif;
+    transform: translateX(-50%);
+  }
+
+  .prototype-switcher p {
+    overflow: hidden;
+    margin: 0;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .prototype-switcher a {
+    display: grid;
+    min-height: 2.75rem;
+    border-radius: 999px;
+    color: inherit;
+    font-size: 1.25rem;
+    place-items: center;
+    text-decoration: none;
+  }
+
+  .prototype-switcher a:hover {
+    background: #343434;
+  }
+
+  .prototype-switcher a:focus-visible {
+    outline: 0.2rem solid #ffe16b;
+    outline-offset: 0.15rem;
+  }
+
+  @media (max-width: 28rem) {
+    .prototype-switcher {
+      grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+      width: calc(100vw - 2rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prototype-switcher,
+    .prototype-switcher * {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

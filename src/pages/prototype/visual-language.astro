@@ -1,0 +1,114 @@
+---
+// PROTOTYPE — throwaway visual-language study for Issue 7.
+// Three variants of a typography-first blog, switchable via ?variant=A|B|C on this route.
+// Append &text=200 to exercise the layouts at 200% root text size.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/source-serif-4';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+
+import PrototypeSwitcher from '../../components/prototype/visual-language/PrototypeSwitcher.astro';
+import VariantA from '../../components/prototype/visual-language/VariantA.astro';
+import VariantB from '../../components/prototype/visual-language/VariantB.astro';
+import VariantC from '../../components/prototype/visual-language/VariantC.astro';
+
+const variants = [
+  { key: 'A', name: 'Literary ledger' },
+  { key: 'B', name: 'Annotated marginalia' },
+  { key: 'C', name: 'Editorial index' },
+];
+const isDevelopment = import.meta.env.DEV;
+---
+
+<!doctype html>
+<html lang="en" data-prototype-variant="A">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex, nofollow" />
+    <script is:inline>
+      const variants = ['A', 'B', 'C'];
+      const requested = new URL(window.location.href).searchParams.get('variant')?.toUpperCase();
+      const variant = requested && variants.includes(requested) ? requested : 'A';
+      const textScale = new URL(window.location.href).searchParams.get('text');
+      document.documentElement.dataset.prototypeVariant = variant;
+      if (textScale === '200') document.documentElement.style.fontSize = '200%';
+      document.title = `${variant} · Visual language prototype · PC — the blog`;
+    </script>
+    <title>Visual language prototype · PC — the blog</title>
+  </head>
+  <body>
+    <a class="prototype-skip" href="#a-main-content" data-prototype-skip>Skip to article</a>
+    <div data-prototype-panel data-variant="A"><VariantA /></div>
+    <div data-prototype-panel data-variant="B" hidden><VariantB /></div>
+    <div data-prototype-panel data-variant="C" hidden><VariantC /></div>
+    <script is:inline>
+      document.querySelectorAll('[data-prototype-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.variant !== document.documentElement.dataset.prototypeVariant;
+      });
+      document.querySelector('[data-prototype-skip]').href =
+        `#${document.documentElement.dataset.prototypeVariant.toLowerCase()}-main-content`;
+    </script>
+    {isDevelopment && <PrototypeSwitcher variants={variants} />}
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: light dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  .prototype-skip {
+    position: fixed;
+    z-index: 200;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    color: #111;
+    font: 700 0.875rem/1 'Inter Variable', sans-serif;
+    transform: translateY(calc(-100% - 1rem));
+  }
+
+  .prototype-skip:focus {
+    outline: 0.2rem solid #111;
+    outline-offset: 0.15rem;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

@@ -1,0 +1,711 @@
+<div class="c-shell" id="c-top">
+  <header class="c-header">
+    <a class="c-brand" href="#c-top"><span>PC</span> THE BLOG</a>
+    <nav aria-label="Primary navigation">
+      <a href="#c-read" aria-current="page">Read</a>
+      <a href="#c-archive">Index</a>
+      <a href="#c-sources">Sources</a>
+      <a href="#c-about">About</a>
+    </nav>
+    <p>ISSUE 001<br />ATHENS · 2026</p>
+  </header>
+
+  <main id="c-main-content">
+    <aside class="c-manifest" aria-labelledby="c-manifest-title">
+      <div>
+        <p class="c-label" id="c-manifest-title">Direction C / Editorial index</p>
+        <p>
+          A fast, high-contrast index wraps a deliberately slow reading column. The mono does the
+          cataloguing; the serif is reserved for sustained attention.
+        </p>
+      </div>
+      <dl>
+        <div><dt>Text / display</dt><dd>Newsreader</dd></div>
+        <div><dt>Interface</dt><dd>Manrope</dd></div>
+        <div><dt>Index / code</dt><dd>JetBrains Mono</dd></div>
+      </dl>
+    </aside>
+
+    <section class="c-ticker" aria-label="Recent archive">
+      <p>RECENT</p>
+      <ol>
+        <li><a href="#c-a1"><span>001</span>Building a home for work that is still becoming</a></li>
+        <li><a href="#c-a2"><span>002</span>The useful friction of a publication gate</a></li>
+        <li><a href="#c-a3"><span>003</span>Notes should be allowed to stay small</a></li>
+      </ol>
+    </section>
+
+    <article id="c-read" class="c-article">
+      <header class="c-article-header">
+        <div class="c-article-number" aria-hidden="true">001</div>
+        <div>
+          <p class="c-label">SYSTEMS / 8 MIN / 31.07.2026</p>
+          <h1>Building a home for work that is still becoming</h1>
+          <p class="c-deck">
+            A public blog and a private writing room need different doors, but they can still share
+            one editorial discipline.
+          </p>
+        </div>
+      </header>
+
+      <div class="c-reading-grid">
+        <aside class="c-contents" aria-label="Article contents">
+          <p>IN THIS POST</p>
+          <ol>
+            <li><a href="#c-boundary">The boundary</a></li>
+            <li><a href="#c-trail">The visible trail</a></li>
+            <li><a href="#c-corrections">Corrections</a></li>
+            <li><a href="#c-sources">Sources</a></li>
+          </ol>
+        </aside>
+
+        <div class="c-prose">
+          <p class="c-lede">
+            Most publishing tools ask for the finished object too early. They offer a title field, a
+            blank editor, and a bright button marked “Publish.” The interface is tidy because all
+            the uncertainty has been pushed into the writer’s head.
+          </p>
+          <p>
+            This blog starts from a different premise: an observation is not yet an article, a draft
+            is not yet a Post, and a Post should not quietly become something else after readers have
+            trusted it. The system should make those distinctions visible without making the act of
+            writing feel bureaucratic.
+          </p>
+
+          <h2 id="c-boundary"><span>01</span>The boundary is part of the design</h2>
+          <p>
+            The public repository contains only what a reader may see. Notes, Drafts, reporting, and
+            publication candidates live in a separately versioned Workspace. That split is not a
+            clever deployment trick. It is a promise that unfinished thinking remains unfinished in
+            public, while still receiving the care of history and review in private.
+          </p>
+          <blockquote>
+            <p>Publication is a change of state, not a side effect of saving a file.</p>
+          </blockquote>
+          <p>
+            A deterministic check guards that boundary. It reads the Post contract, validates the
+            metadata, and refuses to build when the public record contradicts itself.
+          </p>
+        </div>
+
+        <div class="c-code">
+          <div><p>CHECK.PUBLIC.CONTENT</p><span>PASS</span></div>
+          <pre tabindex="0" aria-label="Example content validation command"><code><span>// Verify only material intended for readers</span>
+$ pnpm content:check:public
+
+Validated 12 Posts
+Corrections: 0 unresolved
+Result: publication boundary intact</code></pre>
+        </div>
+
+        <div class="c-prose c-prose-second">
+          <h2 id="c-trail"><span>02</span>A visible trail, kept proportionate</h2>
+          <p>
+            Not every essay needs the machinery of a newsroom. Every factual claim does need an
+            accountable path back to evidence, and every material correction needs a visible date.
+            The rigor should rise with the risk while the reading experience stays calm.
+          </p>
+          <p>
+            That is the visual test for this prototype too: can navigation, source detail, code, and
+            correction history remain available without competing with the sentence currently under
+            the reader’s eye?
+          </p>
+        </div>
+      </div>
+
+      <section class="c-corrections" id="c-corrections" aria-labelledby="c-correction-title">
+        <div>
+          <p class="c-label">CHANGE LOG / 01</p>
+          <h2 id="c-correction-title">Corrections</h2>
+        </div>
+        <article>
+          <time datetime="2026-08-01">01.08.2026</time>
+          <p>
+            An earlier version described the Workspace as unversioned. It is versioned privately;
+            the sentence now reflects that boundary.
+          </p>
+          <span>MEANING-CHANGING</span>
+        </article>
+      </section>
+
+      <section class="c-sources" id="c-sources" aria-labelledby="c-sources-title">
+        <div>
+          <p class="c-label">EVIDENCE / 03</p>
+          <h2 id="c-sources-title">Sources</h2>
+        </div>
+        <ol>
+          <li><span>[01]</span><a href="#c-source-1">Astro content collections documentation</a><small>DOCS · ACCESSED 31.07.2026</small></li>
+          <li><span>[02]</span><a href="#c-source-2">Reuters Journalistic Standards</a><small>STANDARD · ACCESSED 31.07.2026</small></li>
+          <li><span>[03]</span><a href="#c-source-3">Public and private boundaries</a><small>ADR · ACCEPTED 31.07.2026</small></li>
+        </ol>
+      </section>
+    </article>
+
+    <section class="c-archive" id="c-archive" aria-labelledby="c-archive-title">
+      <header>
+        <p class="c-label">ALL POSTS / 2026</p>
+        <h2 id="c-archive-title">Index</h2>
+      </header>
+      <ol>
+        <li><span>001</span><time datetime="2026-07-31">31.07.26</time><a href="#c-index-1">Building a home for work that is still becoming</a><span>Systems</span><span>08:00</span></li>
+        <li><span>002</span><time datetime="2026-07-18">18.07.26</time><a href="#c-index-2">The useful friction of a publication gate</a><span>Systems</span><span>06:00</span></li>
+        <li><span>003</span><time datetime="2026-06-04">04.06.26</time><a href="#c-index-3">Notes should be allowed to stay small</a><span>Practice</span><span>04:00</span></li>
+        <li><span>004</span><time datetime="2026-05-12">12.05.26</time><a href="#c-index-4">A correction is part of the article</a><span>Trust</span><span>07:00</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="c-footer" id="c-about">
+    <p>PC — THE BLOG</p>
+    <p>WRITTEN BY PAOLO CARGNIN<br />ATHENS / GREECE</p>
+    <a href="#c-top">TOP ↑</a>
+  </footer>
+</div>
+
+<style>
+  .c-shell {
+    --ground: #121416;
+    --panel: #1b1e21;
+    --ink: #f2f3ec;
+    --muted: #b7bcb4;
+    --line: #4e5350;
+    --signal: #d8ff68;
+    min-height: 100vh;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Newsreader Variable', Georgia, serif;
+  }
+
+  .c-shell :is(a, pre):focus-visible {
+    outline: 0.2rem solid var(--signal);
+    outline-offset: 0.25rem;
+  }
+
+  .c-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    min-height: 5.5rem;
+    padding-inline: 2rem;
+    border-bottom: 1px solid var(--line);
+    font: 600 0.6875rem/1.3 'Manrope Variable', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .c-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .c-brand span {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: var(--signal);
+    color: var(--ground);
+    font-size: 1.4rem;
+    font-weight: 850;
+    letter-spacing: -0.08em;
+    place-items: center;
+  }
+
+  .c-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .c-header nav a,
+  .c-footer a,
+  .c-ticker a,
+  .c-contents a,
+  .c-sources a,
+  .c-archive a {
+    color: inherit;
+    text-decoration-color: var(--signal);
+    text-underline-offset: 0.22em;
+  }
+
+  .c-header nav a {
+    text-decoration: none;
+  }
+
+  .c-header nav a[aria-current='page'] {
+    color: var(--signal);
+  }
+
+  .c-header > p {
+    margin: 0;
+    color: var(--muted);
+    text-align: end;
+  }
+
+  .c-manifest {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(3rem, 10vw, 10rem);
+    padding: 3rem max(2rem, calc((100vw - 88rem) / 2));
+    border-bottom: 1px solid var(--line);
+    background: var(--panel);
+    font: 500 0.75rem/1.6 'Manrope Variable', sans-serif;
+  }
+
+  .c-manifest > div > p:last-child {
+    max-width: 42rem;
+    margin-bottom: 0;
+    color: var(--muted);
+  }
+
+  .c-label {
+    margin: 0 0 0.8rem;
+    color: var(--signal);
+    font: 650 0.65rem/1.3 'JetBrains Mono Variable', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  .c-manifest dl {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .c-manifest dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.45rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .c-manifest dd {
+    margin: 0;
+    color: var(--signal);
+    font-family: 'JetBrains Mono Variable', monospace;
+    text-align: end;
+  }
+
+  .c-ticker {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    border-bottom: 1px solid var(--line);
+    font: 500 0.6875rem/1.2 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-ticker > p {
+    margin: 0;
+    padding: 1rem 2rem;
+    border-inline-end: 1px solid var(--line);
+    color: var(--signal);
+  }
+
+  .c-ticker ol {
+    display: flex;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .c-ticker li {
+    min-width: 22rem;
+    border-inline-end: 1px solid var(--line);
+  }
+
+  .c-ticker a {
+    display: block;
+    overflow: hidden;
+    padding: 1rem;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .c-ticker a span {
+    margin-inline-end: 1rem;
+    color: var(--signal);
+  }
+
+  .c-article-header {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) minmax(20rem, 4fr);
+    gap: clamp(2rem, 8vw, 10rem);
+    max-width: 88rem;
+    margin-inline: auto;
+    padding: clamp(5rem, 10vw, 10rem) 2rem 6rem;
+  }
+
+  .c-article-number {
+    color: var(--signal);
+    font: 450 clamp(4rem, 8vw, 8rem)/0.8 'JetBrains Mono Variable', monospace;
+    letter-spacing: -0.1em;
+  }
+
+  .c-article-header h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(3.5rem, 2.5rem + 5vw, 8.5rem);
+    font-variation-settings: 'opsz' 72, 'wght' 430;
+    font-weight: 430;
+    letter-spacing: -0.055em;
+    line-height: 0.88;
+    text-wrap: balance;
+  }
+
+  .c-deck {
+    max-width: 42rem;
+    margin: 3rem 0 0;
+    color: var(--muted);
+    font: 500 clamp(1.1rem, 1rem + 0.45vw, 1.45rem)/1.45 'Manrope Variable', sans-serif;
+  }
+
+  .c-reading-grid {
+    display: grid;
+    grid-template-columns: minmax(10rem, 16rem) minmax(20rem, 42rem) minmax(2rem, 1fr);
+    gap: clamp(2rem, 5vw, 6rem);
+    max-width: 88rem;
+    margin-inline: auto;
+    padding: 2rem 2rem 7rem;
+  }
+
+  .c-contents {
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font: 500 0.6875rem/1.5 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-contents > p {
+    margin: 0 0 1rem;
+    color: var(--signal);
+  }
+
+  .c-contents ol {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: decimal-leading-zero inside;
+  }
+
+  .c-contents li::marker {
+    color: var(--muted);
+  }
+
+  .c-prose {
+    grid-column: 2;
+    font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
+    line-height: 1.72;
+  }
+
+  .c-prose > p,
+  .c-prose > h2,
+  .c-prose > blockquote {
+    margin-block: 0 1.65em;
+  }
+
+  .c-lede {
+    color: var(--ink);
+    font-size: 1.3em;
+    font-weight: 520;
+    line-height: 1.5;
+  }
+
+  .c-prose h2 {
+    margin-top: 3em;
+    font-size: clamp(2rem, 1.5rem + 1.3vw, 3.4rem);
+    font-variation-settings: 'opsz' 42;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .c-prose h2 span {
+    display: block;
+    margin-bottom: 0.7rem;
+    color: var(--signal);
+    font: 500 0.7rem/1 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-prose blockquote {
+    margin-inline: -3rem;
+    padding: 2rem 3rem;
+    border-block: 1px solid var(--signal);
+    color: var(--signal);
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.6rem);
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .c-prose blockquote p {
+    margin: 0;
+  }
+
+  .c-code {
+    grid-column: 1 / -1;
+    margin-block: 3rem;
+    border: 1px solid var(--line);
+    background: #090a0b;
+  }
+
+  .c-code > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font: 500 0.625rem/1.3 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-code > div p {
+    margin: 0;
+  }
+
+  .c-code > div span {
+    color: var(--signal);
+  }
+
+  .c-code pre {
+    overflow-x: auto;
+    margin: 0;
+    padding: clamp(1.5rem, 4vw, 4rem);
+    color: var(--ink);
+    font: 450 clamp(0.75rem, 0.7rem + 0.2vw, 0.9rem)/1.75 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-code code span {
+    color: #94a18f;
+  }
+
+  .c-prose-second {
+    grid-column: 2;
+  }
+
+  .c-corrections,
+  .c-sources {
+    display: grid;
+    grid-template-columns: minmax(12rem, 1fr) minmax(20rem, 3fr);
+    gap: clamp(2rem, 8vw, 8rem);
+    padding: 4rem max(2rem, calc((100vw - 88rem) / 2));
+    border-top: 1px solid var(--line);
+  }
+
+  .c-corrections h2,
+  .c-sources h2,
+  .c-archive h2 {
+    margin: 0;
+    font-size: clamp(2.5rem, 2rem + 2vw, 4.5rem);
+    font-weight: 440;
+    letter-spacing: -0.04em;
+  }
+
+  .c-corrections article {
+    display: grid;
+    grid-template-columns: 8rem 1fr auto;
+    align-items: start;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--signal);
+    color: var(--ink);
+    font: 500 0.8rem/1.6 'Manrope Variable', sans-serif;
+  }
+
+  .c-corrections article time,
+  .c-corrections article span {
+    color: var(--signal);
+    font: 500 0.625rem/1.4 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-corrections article p {
+    margin: 0;
+  }
+
+  .c-sources ol {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .c-sources li {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+    font: 500 0.75rem/1.4 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-sources li > span,
+  .c-sources small {
+    color: var(--muted);
+  }
+
+  .c-archive {
+    padding: 8rem max(2rem, calc((100vw - 88rem) / 2));
+    border-top: 1px solid var(--line);
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .c-archive .c-label {
+    color: #506027;
+  }
+
+  .c-archive ol {
+    margin: 4rem 0 0;
+    padding: 0;
+    border-top: 1px solid #9ca098;
+    list-style: none;
+  }
+
+  .c-archive li {
+    display: grid;
+    grid-template-columns: 3rem 7rem 1fr 7rem 4rem;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid #9ca098;
+    font: 550 0.72rem/1.4 'JetBrains Mono Variable', monospace;
+  }
+
+  .c-archive a {
+    text-decoration-color: #506027;
+  }
+
+  .c-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 2rem;
+    padding: 2rem;
+    border-top: 1px solid var(--line);
+    font: 550 0.65rem/1.5 'Manrope Variable', sans-serif;
+  }
+
+  .c-footer p {
+    margin: 0;
+  }
+
+  @media (max-width: 58rem) {
+    .c-header {
+      grid-template-columns: 1fr auto;
+    }
+
+    .c-header > p {
+      display: none;
+    }
+
+    .c-manifest,
+    .c-article-header,
+    .c-corrections,
+    .c-sources {
+      grid-template-columns: 1fr;
+    }
+
+    .c-reading-grid {
+      grid-template-columns: minmax(8rem, 12rem) minmax(18rem, 40rem);
+    }
+
+    .c-prose,
+    .c-prose-second {
+      grid-column: 2;
+    }
+
+    .c-code {
+      grid-column: 1 / -1;
+    }
+
+    .c-corrections article {
+      grid-template-columns: 7rem 1fr;
+    }
+
+    .c-corrections article span {
+      grid-column: 2;
+    }
+
+    .c-sources li {
+      grid-template-columns: 3rem 1fr;
+    }
+
+    .c-sources small {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 42rem) {
+    .c-header {
+      align-items: flex-start;
+      padding: 1rem;
+    }
+
+    .c-header nav {
+      justify-content: flex-end;
+      gap: 0.5rem 1rem;
+    }
+
+    .c-brand {
+      font-size: 0;
+    }
+
+    .c-brand span {
+      font-size: 1.4rem;
+    }
+
+    .c-manifest,
+    .c-article-header,
+    .c-reading-grid,
+    .c-corrections,
+    .c-sources,
+    .c-archive {
+      padding-inline: 1.25rem;
+    }
+
+    .c-article-header {
+      padding-block: 5rem 3rem;
+    }
+
+    .c-article-number {
+      font-size: 3rem;
+    }
+
+    .c-reading-grid {
+      display: block;
+    }
+
+    .c-contents {
+      position: static;
+      margin-bottom: 3rem;
+    }
+
+    .c-prose blockquote {
+      margin-inline: 0;
+      padding-inline: 1.25rem;
+    }
+
+    .c-code {
+      margin-block: 3rem;
+    }
+
+    .c-corrections article,
+    .c-archive li {
+      grid-template-columns: 1fr;
+    }
+
+    .c-corrections article span,
+    .c-archive li > * {
+      grid-column: auto;
+    }
+
+    .c-footer {
+      grid-template-columns: 1fr auto;
+    }
+
+    .c-footer p:nth-child(2) {
+      display: none;
+    }
+  }
+</style>

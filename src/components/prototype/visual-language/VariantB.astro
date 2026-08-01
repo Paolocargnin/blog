@@ -1,0 +1,680 @@
+<div class="b-shell">
+  <header class="b-mobile-header">
+    <a href="#b-top">PC / FIELD NOTES</a>
+    <a href="#b-archive">INDEX ↓</a>
+  </header>
+
+  <div class="b-frame" id="b-top">
+    <aside class="b-rail">
+      <a class="b-logo" href="#b-top" aria-label="PC - the blog home">PC<span>FIELD<br />NOTES</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#b-article" aria-current="page">Latest note</a>
+        <a href="#b-archive">Archive</a>
+        <a href="#b-sources">Sources</a>
+        <a href="#b-process">Process</a>
+      </nav>
+      <div class="b-type-key" aria-labelledby="b-type-title">
+        <p id="b-type-title">Direction B · Annotated marginalia</p>
+        <dl>
+          <div><dt>Reading</dt><dd>Source Serif 4</dd></div>
+          <div><dt>Wayfinding</dt><dd>Manrope</dd></div>
+          <div><dt>Working</dt><dd>JetBrains Mono</dd></div>
+        </dl>
+      </div>
+    </aside>
+
+    <main id="b-main-content" class="b-main">
+      <article id="b-article">
+        <header class="b-article-header">
+          <p class="b-overline">Essay 001 · Systems</p>
+          <h1>Building a home for work that is still becoming</h1>
+          <p class="b-deck">
+            A public blog and a private writing room need different doors, but they can still share
+            one editorial discipline.
+          </p>
+          <div class="b-meta">
+            <p>Paolo Cargnin<br /><time datetime="2026-07-31">31 July 2026</time></p>
+            <p>8 minute read<br />Last verified 1 August</p>
+          </div>
+        </header>
+
+        <div class="b-body">
+          <aside class="b-margin-note">
+            <strong>Reading mode</strong>
+            <span>Source Serif’s sturdier texture keeps the narrow measure from feeling precious.</span>
+          </aside>
+          <p class="b-lede">
+            Most publishing tools ask for the finished object too early. They offer a title field, a
+            blank editor, and a bright button marked “Publish.” The interface is tidy because all
+            the uncertainty has been pushed into the writer’s head.
+          </p>
+          <p>
+            This blog starts from a different premise: an observation is not yet an article, a draft
+            is not yet a Post, and a Post should not quietly become something else after readers have
+            trusted it. The system should make those distinctions visible without making the act of
+            writing feel bureaucratic.
+          </p>
+
+          <h2><span>01</span>The boundary is part of the design</h2>
+          <aside class="b-margin-note">
+            <strong>Public / private</strong>
+            <span>The rail can carry definitions or source notes without interrupting the paragraph.</span>
+          </aside>
+          <p>
+            The public repository contains only what a reader may see. Notes, Drafts, reporting, and
+            publication candidates live in a separately versioned Workspace. That split is not a
+            clever deployment trick. It is a promise that unfinished thinking remains unfinished in
+            public, while still receiving the care of history and review in private.
+          </p>
+          <blockquote>
+            <p>Publication is a change of state, not a side effect of saving a file.</p>
+          </blockquote>
+          <p>
+            A deterministic check guards that boundary. It reads the Post contract, validates the
+            metadata, and refuses to build when the public record contradicts itself.
+          </p>
+
+          <div class="b-code-wrap">
+            <p>TERMINAL / VALIDATION</p>
+            <pre tabindex="0" aria-label="Example content validation command"><code><span># Verify only material intended for readers</span>
+pnpm content:check:public
+
+Validated 12 Posts · 0 unresolved corrections</code></pre>
+          </div>
+
+          <h2><span>02</span>A visible trail, kept proportionate</h2>
+          <p>
+            Not every essay needs the machinery of a newsroom. Every factual claim does need an
+            accountable path back to evidence, and every material correction needs a visible date.
+            The rigor should rise with the risk while the reading experience stays calm.
+          </p>
+          <aside class="b-margin-note">
+            <strong>Question under test</strong>
+            <span>Does visible process increase trust, or does the annotation rail make reading feel audited?</span>
+          </aside>
+          <p>
+            That is the visual test for this prototype too: can navigation, source detail, code, and
+            correction history remain available without competing with the sentence currently under
+            the reader’s eye?
+          </p>
+        </div>
+
+        <section class="b-correction" aria-labelledby="b-correction-title">
+          <div><span>∆</span><p>Correction log</p></div>
+          <div>
+            <h2 id="b-correction-title">Updated 1 August 2026</h2>
+            <p>
+              An earlier version described the Workspace as unversioned. It is versioned privately;
+              the sentence now reflects that boundary.
+            </p>
+          </div>
+        </section>
+
+        <section class="b-sources" id="b-sources" aria-labelledby="b-sources-title">
+          <header>
+            <p>Evidence / 03 items</p>
+            <h2 id="b-sources-title">Sources</h2>
+          </header>
+          <ol>
+            <li><span>01</span><a href="#b-source-1">Astro content collections documentation</a><small>Primary documentation</small></li>
+            <li><span>02</span><a href="#b-source-2">Reuters Journalistic Standards</a><small>Editorial standard</small></li>
+            <li><span>03</span><a href="#b-source-3">Public and private boundaries</a><small>Architecture decision</small></li>
+          </ol>
+        </section>
+      </article>
+
+      <section class="b-archive" id="b-archive" aria-labelledby="b-archive-title">
+        <header>
+          <p>Browse / chronological</p>
+          <h2 id="b-archive-title">Archive</h2>
+        </header>
+        <ol>
+          <li><span class="b-date">2026.07.18</span><a href="#b-archive-1">The useful friction of a publication gate</a><span>Systems</span><span>06 min</span></li>
+          <li><span class="b-date">2026.06.04</span><a href="#b-archive-2">Notes should be allowed to stay small</a><span>Practice</span><span>04 min</span></li>
+          <li><span class="b-date">2026.05.12</span><a href="#b-archive-3">A correction is part of the article</a><span>Trust</span><span>07 min</span></li>
+        </ol>
+      </section>
+
+      <footer id="b-process" class="b-footer">
+        <p>PC — the blog · Written with visible process</p>
+        <a href="#b-top">Return to start ↑</a>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<style>
+  .b-shell {
+    --paper: #edf1e9;
+    --ink: #14231b;
+    --muted: #53645a;
+    --line: #aab8ae;
+    --accent: #145c43;
+    min-height: 100vh;
+    background:
+      linear-gradient(90deg, transparent calc(50% - 0.5px), rgb(20 35 27 / 8%) 0, rgb(20 35 27 / 8%) calc(50% + 0.5px), transparent 0),
+      var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4 Variable', Georgia, serif;
+  }
+
+  .b-shell :is(a, pre):focus-visible {
+    outline: 0.2rem solid #a53c16;
+    outline-offset: 0.22rem;
+  }
+
+  .b-mobile-header {
+    display: none;
+  }
+
+  .b-frame {
+    display: grid;
+    grid-template-columns: minmax(0, 20vw) minmax(0, 1fr);
+  }
+
+  .b-rail {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-height: 100vh;
+    padding: 1.5rem;
+    border-inline-end: 1px solid var(--line);
+    background: rgb(237 241 233 / 94%);
+    font-family: 'Manrope Variable', sans-serif;
+  }
+
+  .b-logo {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    color: inherit;
+    font-size: 3.75rem;
+    font-weight: 800;
+    letter-spacing: -0.08em;
+    line-height: 0.8;
+    text-decoration: none;
+  }
+
+  .b-logo span {
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    line-height: 1.05;
+  }
+
+  .b-rail nav {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 5rem;
+  }
+
+  .b-rail nav a {
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .b-rail nav a[aria-current='page'],
+  .b-rail nav a:hover {
+    color: var(--accent);
+  }
+
+  .b-type-key {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.625rem;
+    line-height: 1.45;
+  }
+
+  .b-type-key > p {
+    margin: 0 0 1rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .b-type-key dl {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .b-type-key dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .b-type-key dd {
+    margin: 0;
+    color: var(--ink);
+    text-align: end;
+  }
+
+  .b-main {
+    min-width: 0;
+  }
+
+  .b-article-header {
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: 8rem 4rem 5rem;
+  }
+
+  .b-overline,
+  .b-meta,
+  .b-margin-note,
+  .b-code-wrap > p,
+  .b-sources header p,
+  .b-archive header p,
+  .b-footer {
+    font-family: 'Manrope Variable', sans-serif;
+  }
+
+  .b-overline {
+    margin: 0 0 2rem;
+    color: var(--accent);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .b-article-header h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(3.5rem, 3rem + 4vw, 7.5rem);
+    font-variation-settings: 'opsz' 56;
+    font-weight: 550;
+    letter-spacing: -0.055em;
+    line-height: 0.86;
+    text-wrap: balance;
+  }
+
+  .b-deck {
+    max-width: 36rem;
+    margin: 2.5rem 0 3.5rem auto;
+    color: var(--muted);
+    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 2rem);
+    font-style: italic;
+    line-height: 1.3;
+  }
+
+  .b-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 36rem;
+    margin-inline-start: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.7rem;
+    line-height: 1.6;
+  }
+
+  .b-meta p {
+    margin: 0;
+  }
+
+  .b-body {
+    display: grid;
+    grid-template-columns: minmax(0, 13rem) minmax(0, 38rem);
+    justify-content: center;
+    column-gap: clamp(2rem, 5vw, 6rem);
+    padding: 1rem 4rem 6rem;
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+    line-height: 1.72;
+  }
+
+  .b-body > :not(.b-margin-note) {
+    grid-column: 2;
+  }
+
+  .b-body > p,
+  .b-body > blockquote,
+  .b-body > h2,
+  .b-code-wrap {
+    margin-block: 0 1.65em;
+  }
+
+  .b-lede {
+    font-size: 1.25em;
+    font-weight: 520;
+    line-height: 1.5;
+  }
+
+  .b-body h2 {
+    position: relative;
+    margin-top: 3.5em;
+    font-size: clamp(2rem, 1.5rem + 1.5vw, 3.25rem);
+    font-variation-settings: 'opsz' 36;
+    font-weight: 540;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .b-body h2 span {
+    position: absolute;
+    inset-inline-end: calc(100% + 1.5rem);
+    color: var(--accent);
+    font: 700 0.65rem/1 'Manrope Variable', sans-serif;
+  }
+
+  .b-margin-note {
+    grid-column: 1;
+    align-self: start;
+    margin-block: 0 1.65rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--accent);
+    color: var(--muted);
+    font-size: 0.6875rem;
+    line-height: 1.55;
+  }
+
+  .b-margin-note + * {
+    grid-column: 2;
+  }
+
+  .b-margin-note strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--accent);
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .b-body blockquote {
+    margin-inline: 0;
+    padding: 1rem 0 1rem 1.75rem;
+    border-inline-start: 0.3rem solid var(--accent);
+    color: var(--accent);
+    font-size: clamp(1.6rem, 1.25rem + 1.2vw, 2.5rem);
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .b-body blockquote p {
+    margin: 0;
+  }
+
+  .b-code-wrap {
+    margin-block: 2rem 3rem;
+    border: 1px solid #1b2d23;
+    background: #dfe7df;
+  }
+
+  .b-code-wrap > p {
+    margin: 0;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #1b2d23;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .b-code-wrap pre {
+    overflow-x: auto;
+    margin: 0;
+    padding: 1.5rem;
+    color: #132019;
+    font: 450 0.8rem/1.65 'JetBrains Mono Variable', monospace;
+  }
+
+  .b-code-wrap code span {
+    color: #53645a;
+  }
+
+  .b-correction,
+  .b-sources,
+  .b-archive {
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: 3rem 4rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .b-correction {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 3rem;
+    background: #dfe7df;
+  }
+
+  .b-correction > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--accent);
+    font: 700 0.7rem/1.3 'Manrope Variable', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .b-correction > div:first-child span {
+    font-size: 2rem;
+  }
+
+  .b-correction h2,
+  .b-sources h2,
+  .b-archive h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 560;
+  }
+
+  .b-correction p:last-child {
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .b-sources,
+  .b-archive {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    gap: 3rem;
+  }
+
+  .b-sources header p,
+  .b-archive header p {
+    margin: 0 0 0.5rem;
+    color: var(--accent);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .b-sources ol,
+  .b-archive ol {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .b-sources li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+    font: 500 0.75rem/1.4 'Manrope Variable', sans-serif;
+  }
+
+  .b-sources li span,
+  .b-sources small {
+    color: var(--muted);
+  }
+
+  .b-sources small {
+    grid-column: 2;
+  }
+
+  .b-sources a,
+  .b-archive a,
+  .b-footer a {
+    color: inherit;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.2em;
+  }
+
+  .b-archive {
+    margin-top: 7rem;
+    padding-bottom: 8rem;
+  }
+
+  .b-archive li {
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 2fr) minmax(0, 0.75fr) minmax(
+        0,
+        0.5fr
+      );
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+    font: 500 0.7rem/1.4 'Manrope Variable', sans-serif;
+  }
+
+  .b-archive li > span {
+    color: var(--muted);
+  }
+
+  .b-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 4rem 6rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+
+  .b-footer p {
+    margin: 0;
+  }
+
+  @media (max-width: 64rem) {
+    .b-frame {
+      grid-template-columns: 11rem 1fr;
+    }
+
+    .b-body {
+      grid-template-columns: minmax(7rem, 10rem) minmax(18rem, 36rem);
+      padding-inline: 2.5rem;
+    }
+
+    .b-article-header,
+    .b-correction,
+    .b-sources,
+    .b-archive {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .b-mobile-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      border-bottom: 1px solid var(--line);
+      font: 700 0.7rem/1 'Manrope Variable', sans-serif;
+    }
+
+    .b-mobile-header a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .b-frame {
+      display: block;
+    }
+
+    .b-rail {
+      position: static;
+      min-height: auto;
+      padding: 1rem;
+      border-bottom: 1px solid var(--line);
+      border-inline-end: 0;
+    }
+
+    .b-logo,
+    .b-rail nav {
+      display: none;
+    }
+
+    .b-type-key {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .b-type-key dl {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .b-type-key dl div {
+      display: block;
+    }
+
+    .b-type-key dd {
+      text-align: start;
+    }
+
+    .b-article-header {
+      padding: 5rem 1.25rem 3rem;
+    }
+
+    .b-deck,
+    .b-meta {
+      margin-inline-start: 0;
+    }
+
+    .b-body {
+      display: block;
+      padding: 1rem 1.25rem 4rem;
+    }
+
+    .b-margin-note {
+      margin-block: 2rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+    }
+
+    .b-body h2 span {
+      position: static;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .b-correction,
+    .b-sources,
+    .b-archive {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem 1.25rem;
+    }
+
+    .b-sources li,
+    .b-archive li {
+      grid-template-columns: 2rem 1fr;
+    }
+
+    .b-sources small,
+    .b-archive li > span:not(.b-date) {
+      grid-column: 2;
+    }
+
+    .b-footer {
+      flex-direction: column;
+      padding-inline: 1.25rem;
+    }
+  }
+</style>

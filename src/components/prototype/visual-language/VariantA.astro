@@ -1,0 +1,481 @@
+<div class="a-shell">
+  <header class="a-header">
+    <a class="a-mark" href="#top">PC <span>— the blog</span></a>
+    <nav aria-label="Primary navigation">
+      <a href="#article">Latest</a>
+      <a href="#archive">Archive</a>
+      <a href="#about">Editorial process</a>
+    </nav>
+  </header>
+
+  <main id="a-main-content">
+    <aside class="a-brief" aria-labelledby="a-brief-title">
+      <p class="a-kicker" id="a-brief-title">Direction A · Literary ledger</p>
+      <p>
+        A quiet, centered journal. Newsreader carries the argument, Inter keeps the navigation
+        nearly invisible, and IBM Plex Mono makes evidence and code feel methodical.
+      </p>
+      <dl>
+        <div><dt>Serif</dt><dd>Newsreader</dd></div>
+        <div><dt>Sans</dt><dd>Inter</dd></div>
+        <div><dt>Mono</dt><dd>IBM Plex Mono</dd></div>
+      </dl>
+    </aside>
+
+    <article id="article" class="a-article">
+      <header class="a-article-header">
+        <p class="a-kicker">Field note · 31 July 2026 · 8 min read</p>
+        <h1>Building a home for work that is still becoming</h1>
+        <p class="a-deck">
+          A public blog and a private writing room need different doors, but they can still share
+          one editorial discipline.
+        </p>
+        <ul class="a-tags" aria-label="Tags">
+          <li>writing systems</li>
+          <li>building in public</li>
+        </ul>
+      </header>
+
+      <div class="a-prose">
+        <p class="a-lede">
+          Most publishing tools ask for the finished object too early. They offer a title field, a
+          blank editor, and a bright button marked “Publish.” The interface is tidy because all the
+          uncertainty has been pushed into the writer’s head.
+        </p>
+        <p>
+          This blog starts from a different premise: an observation is not yet an article, a draft
+          is not yet a Post, and a Post should not quietly become something else after readers have
+          trusted it. The system should make those distinctions visible without making the act of
+          writing feel bureaucratic.
+        </p>
+
+        <h2>The boundary is part of the design</h2>
+        <p>
+          The public repository contains only what a reader may see. Notes, Drafts, reporting, and
+          publication candidates live in a separately versioned Workspace. That split is not a
+          clever deployment trick. It is a promise that unfinished thinking remains unfinished in
+          public, while still receiving the care of history and review in private.
+        </p>
+        <blockquote>
+          <p>Publication is a change of state, not a side effect of saving a file.</p>
+        </blockquote>
+        <p>
+          A deterministic check guards that boundary. It reads the Post contract, validates the
+          metadata, and refuses to build when the public record contradicts itself.
+        </p>
+
+        <pre tabindex="0" aria-label="Example content validation command"><code><span class="code-comment"># Verify only material intended for readers</span>
+pnpm content:check:public
+
+<span class="code-output">Validated 12 Posts · 0 unresolved corrections</span></code></pre>
+
+        <h2>A visible trail, kept proportionate</h2>
+        <p>
+          Not every essay needs the machinery of a newsroom. Every factual claim does need an
+          accountable path back to evidence, and every material correction needs a visible date.
+          The rigor should rise with the risk while the reading experience stays calm.
+        </p>
+        <p>
+          That is the visual test for this prototype too: can navigation, source detail, code, and
+          correction history remain available without competing with the sentence currently under
+          the reader’s eye?
+        </p>
+      </div>
+
+      <section class="a-correction" aria-labelledby="a-correction-title">
+        <p class="a-kicker">Corrections</p>
+        <h2 id="a-correction-title">Updated 1 August 2026</h2>
+        <p>
+          An earlier version described the Workspace as unversioned. It is versioned privately;
+          the sentence now reflects that boundary.
+        </p>
+      </section>
+
+      <section class="a-sources" aria-labelledby="a-sources-title">
+        <p class="a-kicker">Reader-verifiable evidence</p>
+        <h2 id="a-sources-title">Sources</h2>
+        <ol>
+          <li><a href="#source-1">Astro content collections documentation</a></li>
+          <li><a href="#source-2">Reuters Journalistic Standards</a></li>
+          <li><a href="#source-3">Repository decision record: public and private boundaries</a></li>
+        </ol>
+      </section>
+    </article>
+
+    <section class="a-archive" id="archive" aria-labelledby="a-archive-title">
+      <header>
+        <p class="a-kicker">Continue reading</p>
+        <h2 id="a-archive-title">From the archive</h2>
+      </header>
+      <ol>
+        <li><time datetime="2026-07-18">18 Jul</time><a href="#archive-1">The useful friction of a publication gate</a><span>6 min</span></li>
+        <li><time datetime="2026-06-04">04 Jun</time><a href="#archive-2">Notes should be allowed to stay small</a><span>4 min</span></li>
+        <li><time datetime="2026-05-12">12 May</time><a href="#archive-3">A correction is part of the article</a><span>7 min</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer id="about" class="a-footer">
+    <p>Written and published by Paolo Cargnin.</p>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+</div>
+
+<style>
+  .a-shell {
+    --paper: #f5f0e7;
+    --ink: #211d18;
+    --muted: #655d53;
+    --line: #cfc4b5;
+    --accent: #8b2f1e;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Newsreader Variable', Georgia, serif;
+    font-size: clamp(1.0625rem, 0.98rem + 0.28vw, 1.25rem);
+    line-height: 1.68;
+  }
+
+  .a-shell :is(a, pre):focus-visible {
+    outline: 0.2rem solid var(--accent);
+    outline-offset: 0.25rem;
+  }
+
+  .a-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--line);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .a-header a,
+  .a-footer a,
+  .a-archive a,
+  .a-sources a {
+    color: inherit;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  .a-mark {
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .a-mark span {
+    color: var(--muted);
+    font-weight: 450;
+    text-transform: none;
+  }
+
+  .a-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+  }
+
+  .a-brief {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.8fr) minmax(0, 1.3fr);
+    gap: 2rem;
+    max-width: 72rem;
+    margin: 3rem auto 6rem;
+    padding: 1.25rem 0;
+    border-block: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.55;
+  }
+
+  .a-brief > p {
+    margin: 0;
+  }
+
+  .a-brief dl {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .a-brief dl div {
+    min-width: 0;
+  }
+
+  .a-brief dt {
+    color: var(--accent);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .a-brief dd {
+    margin: 0.2rem 0 0;
+    color: var(--ink);
+  }
+
+  .a-kicker {
+    margin: 0;
+    color: var(--accent);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .a-article {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .a-article-header {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .a-article h1 {
+    max-width: 13ch;
+    margin: 1.25rem auto 1.5rem;
+    font-size: clamp(3rem, 2rem + 4vw, 6.75rem);
+    font-variation-settings: 'opsz' 72, 'wght' 430;
+    font-weight: 430;
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+
+  .a-deck {
+    max-width: 33rem;
+    margin: 0 auto 1.5rem;
+    color: var(--muted);
+    font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.75rem);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .a-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0;
+    color: var(--muted);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.6875rem;
+    list-style: none;
+    text-transform: uppercase;
+  }
+
+  .a-tags li + li::before {
+    margin-inline-end: 0.5rem;
+    content: '·';
+  }
+
+  .a-prose > p,
+  .a-prose > h2,
+  .a-prose > blockquote,
+  .a-prose > pre {
+    margin-block: 0 1.7em;
+  }
+
+  .a-prose h2 {
+    margin-top: 2.6em;
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+    font-variation-settings: 'opsz' 36;
+    font-weight: 520;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  .a-lede::first-letter {
+    float: left;
+    margin: 0.08em 0.12em 0 0;
+    color: var(--accent);
+    font-size: 4.4em;
+    line-height: 0.72;
+  }
+
+  .a-prose blockquote {
+    padding: 1.5rem 3rem;
+    border-block: 1px solid var(--line);
+    color: var(--accent);
+    font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.5rem);
+    font-style: italic;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .a-prose blockquote p {
+    margin: 0;
+  }
+
+  .a-prose pre {
+    overflow-x: auto;
+    padding: 1.5rem 2rem;
+    border-radius: 0.2rem;
+    background: #211d18;
+    color: #f8f2e9;
+    font: 400 0.8125rem/1.7 'IBM Plex Mono', monospace;
+    tab-size: 2;
+  }
+
+  .code-comment {
+    color: #d6aa9d;
+  }
+
+  .code-output {
+    color: #b9d6b6;
+  }
+
+  .a-correction,
+  .a-sources {
+    margin-block: 4rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+  }
+
+  .a-correction {
+    border-inline-start: 0.35rem solid var(--accent);
+  }
+
+  .a-correction h2,
+  .a-sources h2 {
+    margin: 0.4rem 0 0.75rem;
+    font-size: 1.4rem;
+    font-weight: 560;
+  }
+
+  .a-correction p:last-child,
+  .a-sources ol {
+    margin-bottom: 0;
+  }
+
+  .a-sources ol {
+    padding-inline-start: 1.25rem;
+  }
+
+  .a-sources li {
+    margin-block: 0.55rem;
+    padding-inline-start: 0.3rem;
+  }
+
+  .a-archive {
+    max-width: 72rem;
+    margin: 8rem auto 0;
+    padding: 3rem 0 8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .a-archive header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .a-archive h2 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 480;
+  }
+
+  .a-archive ol {
+    margin: 2rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .a-archive li {
+    display: grid;
+    grid-template-columns: 5rem 1fr auto;
+    gap: 1.5rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.85rem;
+  }
+
+  .a-archive :is(time, span) {
+    color: var(--muted);
+  }
+
+  .a-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem max(1.5rem, calc((100vw - 72rem) / 2));
+    background: #211d18;
+    color: #f5f0e7;
+    font-family: 'Inter Variable', sans-serif;
+    font-size: 0.75rem;
+  }
+
+  .a-footer p {
+    margin: 0;
+  }
+
+  @media (max-width: 76rem) {
+    .a-brief,
+    .a-archive {
+      margin-inline: 2rem;
+    }
+  }
+
+  @media (max-width: 48rem) {
+    .a-header,
+    .a-archive header,
+    .a-footer {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .a-brief {
+      grid-template-columns: 1fr;
+      margin-block: 2rem 4rem;
+    }
+
+    .a-brief dl {
+      grid-template-columns: 1fr;
+    }
+
+    .a-article-header {
+      text-align: start;
+    }
+
+    .a-article h1,
+    .a-deck {
+      margin-inline: 0;
+    }
+
+    .a-tags {
+      justify-content: flex-start;
+    }
+
+    .a-prose blockquote,
+    .a-prose pre {
+      margin-inline: 0;
+    }
+
+    .a-archive li {
+      grid-template-columns: 1fr auto;
+    }
+
+    .a-archive time {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
