@@ -20,6 +20,7 @@ const variants = [
   { key: 'B', name: 'Annotated marginalia' },
   { key: 'C', name: 'Editorial index' },
 ];
+const variantKeys = variants.map(({ key }) => key);
 const isDevelopment = import.meta.env.DEV;
 ---
 
@@ -30,10 +31,9 @@ const isDevelopment = import.meta.env.DEV;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content="noindex, nofollow" />
-    <script is:inline>
-      const variants = ['A', 'B', 'C'];
+    <script is:inline define:vars={{ variantKeys }}>
       const requested = new URL(window.location.href).searchParams.get('variant')?.toUpperCase();
-      const variant = requested && variants.includes(requested) ? requested : 'A';
+      const variant = requested && variantKeys.includes(requested) ? requested : variantKeys[0];
       const textScale = new URL(window.location.href).searchParams.get('text');
       document.documentElement.dataset.prototypeVariant = variant;
       if (textScale === '200') document.documentElement.style.fontSize = '200%';
@@ -71,6 +71,7 @@ const isDevelopment = import.meta.env.DEV;
 
   body {
     margin: 0;
+    font-family: 'JetBrains Mono Variable', monospace;
   }
 
   img,
@@ -87,7 +88,7 @@ const isDevelopment = import.meta.env.DEV;
     padding: 0.75rem 1rem;
     background: #fff;
     color: #111;
-    font: 700 0.875rem/1 'Inter Variable', sans-serif;
+    font: 700 0.875rem/1 'JetBrains Mono Variable', monospace;
     transform: translateY(calc(-100% - 1rem));
   }
 
