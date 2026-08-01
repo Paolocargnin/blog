@@ -6,7 +6,6 @@ import { contentContract } from '../src/content/contract.mjs';
 import { editorialWorkflowContract } from '../src/editorial/contract.mjs';
 import { locateWorkingArticle, pathExists } from './editorial-paths.mjs';
 import {
-  hasMarkdownListItemOutsideFences,
   isIsoDate,
   isPlainObject,
   markdownSections,
@@ -32,6 +31,26 @@ function requireText(data, field, filePath, errors) {
   if (typeof data[field] !== 'string' || data[field].trim() === '') {
     errors.push(`${filePath}: ${field} must be a non-empty string.`);
   }
+}
+
+function hasStructuredPublicSources(value) {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every(
+      (source) =>
+        isPlainObject(source) &&
+        Object.keys(source).every((key) =>
+          ['title', 'url', 'description'].includes(key),
+        ) &&
+        typeof source.title === 'string' &&
+        source.title.trim() !== '' &&
+        typeof source.description === 'string' &&
+        source.description.trim() !== '' &&
+        typeof source.url === 'string' &&
+        /^https?:\/\//.test(source.url),
+    )
+  );
 }
 
 function requireReviewHeader(data, filePath, expectedDigest, errors) {
@@ -118,11 +137,12 @@ function counterDiscussionErrors(data, body, filePath, expectedDigest, errors) {
 function publicationCheckErrors(
   data,
   body,
-  articleBody,
+  articleDocument,
   filePath,
   expectedDigest,
   errors,
 ) {
+  const { data: articleData, body: articleBody } = articleDocument;
   const articleSections = markdownSections(articleBody);
   const sourcesSections = articleSections.filter(
     (section) => section.title.toLowerCase() === 'sources',
@@ -153,26 +173,22 @@ function publicationCheckErrors(
     errors.push(`${filePath}: sourcesProposal must be included or omitted.`);
   }
   requireText(data, 'sourcesRationale', filePath, errors);
-  if (data.sourcesProposal === 'included' && sourcesSections.length !== 1) {
+  if (
+    data.sourcesProposal === 'included' &&
+    !hasStructuredPublicSources(articleData.sources)
+  ) {
     errors.push(
-      `${filePath}: an included Sources proposal requires exactly one public ## Sources section.`,
+      `${filePath}: an included Sources proposal requires structured public sources with title, HTTP(S) url, and description.`,
     );
   }
-  if (data.sourcesProposal === 'included' && sourcesSections.length === 1) {
-    const sources = sourcesSections[0];
-    const sourceEntries = articleBody.slice(sources.contentStart, sources.end);
-    if (articleSections.at(-1) !== sources) {
-      errors.push(`${filePath}: the public ## Sources section must be last.`);
-    }
-    if (!hasMarkdownListItemOutsideFences(sourceEntries)) {
-      errors.push(
-        `${filePath}: the public ## Sources section must contain at least one source list entry.`,
-      );
-    }
-  }
-  if (data.sourcesProposal === 'omitted' && sourcesSections.length > 0) {
+  if (sourcesSections.length > 0) {
     errors.push(
-      `${filePath}: an omitted Sources proposal conflicts with the public ## Sources section.`,
+      `${filePath}: public Sources must use the structured frontmatter sources field, not a ## Sources section.`,
+    );
+  }
+  if (data.sourcesProposal === 'omitted' && 'sources' in articleData) {
+    errors.push(
+      `${filePath}: an omitted Sources proposal conflicts with structured public sources.`,
     );
   }
   if (
@@ -301,7 +317,7 @@ export async function publicationGateErrors({ workspace, slug }) {
   publicationCheckErrors(
     publicationCheck.data,
     publicationCheck.body,
-    articleDocument.body,
+    articleDocument,
     publicationFile,
     expectedDigest,
     errors,

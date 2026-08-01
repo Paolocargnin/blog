@@ -1,5 +1,6 @@
 import path from 'node:path';
 
+import { contentContract } from '../src/content/contract.mjs';
 import { validateContent } from './content-contract.mjs';
 
 const argumentsByName = new Map();
@@ -28,6 +29,6 @@ const options = {
 const { workspacePresent } = await validateContent(options);
 console.log(
   publicOnly || !workspacePresent
-    ? 'Public Posts satisfy content contract v1.'
-    : 'Public Posts and Workspace satisfy content contract v1.',
+    ? `Public Posts satisfy content contract v${contentContract.version}.`
+    : `Public Posts and Workspace satisfy content contract v${contentContract.version}.`,
 );

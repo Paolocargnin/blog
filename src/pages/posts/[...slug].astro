@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 
 import Corrections from '../../components/Corrections.astro';
+import Sources from '../../components/Sources.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -28,6 +29,7 @@ const { Content } = await render(post);
       {post.data.updatedAt && <p class="updated">Updated {formatDate(post.data.updatedAt)}</p>}
     </header>
     <div class="prose"><Content /></div>
+    <Sources sources={post.data.sources} />
     <Corrections corrections={post.data.corrections} />
   </article>
   <script>
@@ -39,25 +41,6 @@ const { Content } = await render(post);
       );
     });
 
-    document.querySelectorAll<HTMLHeadingElement>('.prose h2#sources').forEach((heading) => {
-      const sourceList = heading.nextElementSibling;
-      if (!(sourceList instanceof HTMLUListElement || sourceList instanceof HTMLOListElement)) return;
-
-      const sources = document.createElement('section');
-      sources.className = 'sources';
-      sources.setAttribute('aria-labelledby', 'sources-title');
-
-      const prose = heading.parentElement;
-      const headingBlock = document.createElement('div');
-      const label = document.createElement('p');
-      const sourceCount = sourceList.querySelectorAll(':scope > li').length;
-      label.textContent = `EVIDENCE / ${String(sourceCount).padStart(2, '0')}`;
-      heading.id = 'sources-title';
-      prose?.insertBefore(sources, heading);
-      headingBlock.append(label, heading);
-
-      sources.append(headingBlock, sourceList);
-    });
   </script>
   <div class="floating-number" aria-hidden="true">001</div>
   <SiteFooter slot="footer" />
@@ -130,47 +113,6 @@ const { Content } = await render(post);
     font-size: clamp(2rem, 1.5rem + 1.3vw, 3.5rem);
   }
 
-  .prose :global(.sources) {
-    display: grid;
-    grid-template-columns: 40% auto;
-    gap: clamp(2rem, 5vw, 6rem);
-    width: min(72rem, calc(100vw - 2rem));
-    margin: clamp(3rem, 8vw, 6rem) 50%;
-    padding: clamp(3rem, 8vw, 6rem) 2rem;
-    border-top: 1px solid var(--line);
-    transform: translateX(-50%);
-  }
-
-  .prose :global(.sources > div > p) {
-    margin: 0 0 0.75rem;
-    color: var(--signal);
-    font-size: 0.68rem;
-    font-weight: 650;
-    letter-spacing: 0.05em;
-  }
-
-  .prose :global(.sources h2) {
-    margin: 0;
-    font-size: clamp(2.3rem, 1.7rem + 2vw, 4.3rem);
-    font-weight: 460;
-    letter-spacing: -0.05em;
-    line-height: 0.95;
-  }
-
-  .prose :global(.sources > ul),
-  .prose :global(.sources > ol) {
-    margin: 0;
-    padding: 1.25rem 1.25rem 1.25rem 2.5rem;
-    border: 1px solid var(--line);
-    background: var(--panel);
-    font-size: 0.84em;
-    line-height: 1.7;
-  }
-
-  .prose :global(.sources li + li) {
-    margin-top: 0.5rem;
-  }
-
   .prose :global(h3) {
     font-size: clamp(1.4rem, 1.2rem + 0.8vw, 2rem);
   }
@@ -229,13 +171,4 @@ const { Content } = await render(post);
     }
   }
 
-  @media (max-width: 42rem) {
-    .prose :global(.sources) {
-      grid-template-columns: 1fr;
-      width: 100%;
-      margin-inline: 0;
-      padding-inline: 1rem;
-      transform: none;
-    }
-  }
 </style>

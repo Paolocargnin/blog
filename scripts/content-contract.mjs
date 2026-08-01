@@ -73,6 +73,46 @@ function validateStableId(value, description, errors) {
   }
 }
 
+function isPublicUrl(value) {
+  if (typeof value !== 'string') {
+    return false;
+  }
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function validateSources(sources, filePath, errors) {
+  if (!Array.isArray(sources) || sources.length === 0) {
+    errors.push(
+      `${filePath}: sources must contain at least one public source.`,
+    );
+    return;
+  }
+
+  sources.forEach((source, index) => {
+    const description = `${filePath}: sources[${index}]`;
+    if (!isPlainObject(source)) {
+      errors.push(`${description} must be a mapping.`);
+      return;
+    }
+    const fields = Object.keys(source);
+    if (
+      fields.some((field) => !['title', 'url', 'description'].includes(field))
+    ) {
+      errors.push(`${description} has an unsupported field.`);
+    }
+    requireString(source, 'title', description, errors);
+    if (!isPublicUrl(source.url)) {
+      errors.push(`${description}.url must be an absolute HTTP(S) URL.`);
+    }
+    requireString(source, 'description', description, errors);
+  });
+}
+
 function validatePostMetadata(data, filePath, errors) {
   const allowedFields = new Set([
     ...contentContract.post.requiredMetadata,
@@ -177,6 +217,21 @@ function validatePostMetadata(data, filePath, errors) {
       }
     });
   }
+
+  if ('sources' in data) {
+    validateSources(data.sources, filePath, errors);
+  }
+}
+
+function validatePostBody(body, filePath, errors) {
+  const hasLegacySourcesSection = /^ {0,3}##(?!#)\s+sources\s*#*\s*$/im.test(
+    body,
+  );
+  if (hasLegacySourcesSection) {
+    errors.push(
+      `${filePath}: public Sources must use the structured frontmatter sources field, not a ## Sources section.`,
+    );
+  }
 }
 
 /**
@@ -189,8 +244,9 @@ export async function validatePostFile(filePath, slug, postsDirectory) {
   if (!slugPattern.test(slug)) {
     errors.push(`${slug}: filename must be a lowercase hyphenated slug.`);
   }
-  const { data } = await readMarkdown(filePath, errors);
+  const { data, body } = await readMarkdown(filePath, errors);
   validatePostMetadata(data, filePath, errors);
+  validatePostBody(body, filePath, errors);
 
   if (
     postsDirectory &&
@@ -251,8 +307,9 @@ async function validatePublicDirectory(postsDirectory, errors) {
         `${entryPath}: filename must be a lowercase hyphenated slug.`,
       );
     }
-    const { data } = await readMarkdown(entryPath, errors);
+    const { data, body } = await readMarkdown(entryPath, errors);
     validatePostMetadata(data, entryPath, errors);
+    validatePostBody(body, entryPath, errors);
     if (typeof data.id === 'string' && stableIdPattern.test(data.id)) {
       const firstPost = postIds.get(data.id);
       if (firstPost) {

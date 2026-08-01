@@ -254,9 +254,7 @@ describe('editorial workflow', () => {
       validatePublicationEvidence({ workspace, slug: 'candidate' }),
     ).rejects.toMatchObject({
       errors: expect.arrayContaining([
-        expect.stringContaining(
-          'requires exactly one public ## Sources section',
-        ),
+        expect.stringContaining('requires structured public sources'),
         expect.stringContaining(
           'every publication-check item must be resolved',
         ),
@@ -264,12 +262,12 @@ describe('editorial workflow', () => {
     });
   });
 
-  it('requires a non-empty public Sources list as the final Post section', async () => {
+  it('requires structured public sources and rejects the legacy Markdown section', async () => {
     const { workspace } = await temporaryProject();
     const candidate = await createCandidate(workspace);
     await writeFile(
       path.join(candidate, 'article.md'),
-      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\n---\n\nA checked claim.\n\n## Sources\n\n- [Primary source](https://example.com/source)\n`,
+      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\nsources:\n  - title: Primary source\n    url: https://example.com/source\n    description: The primary source for this checked claim.\n---\n\nA checked claim.\n`,
       'utf8',
     );
     const digest = await candidateDigest({ workspace, slug: 'candidate' });
@@ -295,7 +293,7 @@ describe('editorial workflow', () => {
 
     await writeFile(
       path.join(candidate, 'article.md'),
-      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\n---\n\nA checked claim.\n\n## Sources\n\n## Afterword\n\nThis section incorrectly follows Sources.\n`,
+      `---\nid: 6a4de3e2-126e-4bd7-a6ba-cd458e2a84ad\ntitle: Candidate\ndescription: A candidate used to test editorial gates.\npublishedAt: 2026-07-31\ntags:\n  - writing\nsources:\n  - title: Primary source\n    url: https://example.com/source\n    description: The primary source for this checked claim.\n---\n\nA checked claim.\n\n## Sources\n\n- [Primary source](https://example.com/source)\n\n## Afterword\n\nThis section incorrectly follows Sources.\n`,
       'utf8',
     );
     const invalidDigest = await candidateDigest({
@@ -319,8 +317,9 @@ describe('editorial workflow', () => {
       validatePublicationEvidence({ workspace, slug: 'candidate' }),
     ).rejects.toMatchObject({
       errors: expect.arrayContaining([
-        expect.stringContaining('public ## Sources section must be last'),
-        expect.stringContaining('must contain at least one source list entry'),
+        expect.stringContaining(
+          'public Sources must use the structured frontmatter sources field',
+        ),
       ]),
     });
   });

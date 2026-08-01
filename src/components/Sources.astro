@@ -1,0 +1,96 @@
+---
+import type { Post } from '../lib/posts';
+
+interface Props {
+  sources: Post['data']['sources'];
+}
+
+const { sources } = Astro.props;
+---
+
+{
+  sources && (
+    <section class="sources" aria-labelledby="sources-title">
+      <div>
+        <p>EVIDENCE / {String(sources.length).padStart(2, '0')}</p>
+        <h2 id="sources-title">Sources</h2>
+      </div>
+      <ol>
+        {sources.map((source) => (
+          <li>
+            <a href={source.url}>{source.title}</a>
+            <p>{source.description}</p>
+            <span>source</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .sources {
+    display: grid;
+    grid-template-columns: 40% auto;
+    gap: clamp(2rem, 5vw, 6rem);
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .sources > div > p,
+  a,
+  span {
+    margin: 0 0 0.75rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(2.3rem, 1.7rem + 2vw, 4.3rem);
+    font-weight: 460;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+  }
+
+  ol {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    background: var(--panel);
+  }
+
+  a {
+    display: inline-block;
+  }
+
+  li p {
+    max-width: 58ch;
+    margin: 0.3rem 0 1rem;
+    line-height: 1.6;
+  }
+
+  li span {
+    display: block;
+    margin: 0;
+    color: var(--muted);
+  }
+
+  @media (max-width: 42rem) {
+    .sources {
+      grid-template-columns: 1fr;
+      padding-inline: 1rem;
+    }
+  }
+</style>

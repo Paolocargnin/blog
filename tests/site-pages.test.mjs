@@ -25,7 +25,7 @@ describe('reading surfaces', () => {
     expect(pages[0]).toContain('RECENT POSTS');
     expect(pages[1]).toContain('ALL POSTS');
     expect(pages[2]).toContain('<Corrections');
-    expect(pages[2]).toContain(':global(.sources)');
+    expect(pages[2]).toContain('<Sources');
     expect(pages[3]).toContain('controlledTagIds');
     expect(pages[4]).toContain('getStaticPaths');
     expect(pages[5]).toContain('404 / MISSING FROM THE INDEX');
@@ -40,14 +40,13 @@ describe('reading surfaces', () => {
     expect(page).toContain('mix-blend-mode: exclusion');
   });
 
-  it('enhances public Markdown Sources into the Corrections-style semantic region', async () => {
-    const page = await read('src/pages/posts/[...slug].astro');
+  it('renders structured public Sources with the same semantic region as Corrections', async () => {
+    const sources = await read('src/components/Sources.astro');
 
-    expect(page).toContain(
-      "sources.setAttribute('aria-labelledby', 'sources-title')",
+    expect(sources).toContain('aria-labelledby="sources-title"');
+    expect(sources).toContain(
+      "EVIDENCE / {String(sources.length).padStart(2, '0')}",
     );
-    expect(page).toContain(
-      "EVIDENCE / ${String(sourceCount).padStart(2, '0')}",
-    );
+    expect(sources).toContain('grid-template-columns: 40% auto');
   });
 });

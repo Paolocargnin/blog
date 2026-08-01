@@ -20,7 +20,7 @@ describe('content check', () => {
     ]);
 
     expect(stdout).toContain(
-      'Public Posts and Workspace satisfy content contract v1.',
+      'Public Posts and Workspace satisfy content contract v2.',
     );
   });
 
@@ -75,6 +75,26 @@ describe('content check', () => {
     });
   });
 
+  it('rejects malformed structured public sources', async () => {
+    await expect(
+      validatePublicContent({
+        postsDirectory: path.join(
+          fixturesDirectory,
+          'invalid-source',
+          'src',
+          'content',
+          'posts',
+        ),
+      }),
+    ).rejects.toMatchObject({
+      errors: expect.arrayContaining([
+        expect.stringContaining(
+          'sources[0].url must be an absolute HTTP(S) URL',
+        ),
+      ]),
+    });
+  });
+
   it('rejects an incompatible Workspace sidecar with migration guidance', async () => {
     await expect(
       execFileAsync('node', [
@@ -99,6 +119,6 @@ describe('content check', () => {
       '--public-only',
     ]);
 
-    expect(stdout).toContain('Public Posts satisfy content contract v1.');
+    expect(stdout).toContain('Public Posts satisfy content contract v2.');
   });
 });
