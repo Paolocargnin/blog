@@ -52,12 +52,14 @@ each finding has a `fixed`, `rejected`, or `accepted` disposition plus a
 rationale before the record reaches `status: resolved`.
 
 `publication-check.md` proposes whether the public Post includes or omits its
-`## Sources` section, with a rationale either way. An included section must be
-the final Post section and contain a curated Markdown list of public sources. It
-also records whether a Post-specific `## AI disclosure` is included or judged
-not material. The publication script rejects missing evidence, open checkboxes,
-unresolved verification markers, unresolved counter-discussion findings, and
-inconsistent Sources or disclosure decisions. All three review records must
+structured `sources` frontmatter field, with a rationale either way. An
+included field contains a curated list of `{ title, url, description }` records;
+the layout renders it as the public Sources section. It also records whether a
+Post-specific `## AI disclosure` is included or judged not material. The
+publication script rejects missing evidence, open checkboxes, unresolved
+verification markers, legacy Markdown Sources sections, unresolved
+counter-discussion findings, and inconsistent Sources or disclosure decisions.
+All three review records must
 name the digest of the current `article.md` and optional `sources.md`; an edit
 makes them stale.
 

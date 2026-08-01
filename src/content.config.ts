@@ -16,6 +16,16 @@ const correction = z
   })
   .strict();
 
+const source = z
+  .object({
+    title: z.string().trim().min(1),
+    url: z.url().refine((value) => /^https?:\/\//.test(value), {
+      message: 'Source URLs must use HTTP(S).',
+    }),
+    description: z.string().trim().min(1),
+  })
+  .strict();
+
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
   schema: z
@@ -33,6 +43,7 @@ const posts = defineCollection({
           message: 'Post tags must not repeat a controlled tag ID.',
         }),
       corrections: z.array(correction).min(1).optional(),
+      sources: z.array(source).min(1).optional(),
     })
     .strict()
     .superRefine((post, context) => {

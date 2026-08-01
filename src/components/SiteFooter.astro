@@ -1,0 +1,45 @@
+<footer class="site-footer">
+  <p>PC — THE BLOG</p>
+  <p>WRITTEN BY PAOLO CARGNIN<br />ATHENS / GREECE</p>
+  <a href="#top">TOP ↑</a>
+</footer>
+
+<style>
+  .site-footer {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: end;
+    padding: 2rem clamp(1rem, 3vw, 2rem);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+
+  .site-footer p {
+    margin: 0;
+  }
+
+  .site-footer p:nth-child(2) {
+    text-align: center;
+  }
+
+  .site-footer a {
+    color: var(--signal);
+    text-align: end;
+  }
+
+  @media (max-width: 42rem) {
+    .site-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer p:nth-child(2),
+    .site-footer a {
+      text-align: start;
+    }
+  }
+</style>

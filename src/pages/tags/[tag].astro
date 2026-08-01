@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+
+import PostCard from '../../components/PostCard.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { controlledTagIds } from '../../content/contract.mjs';
+import { postsWithTag, sortPostsNewestFirst, tagLabel } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return controlledTagIds.map((tag) => ({ params: { tag } }));
+}
+
+const tag = Astro.params.tag!;
+const posts = sortPostsNewestFirst(postsWithTag(await getCollection('posts'), tag));
+const label = tagLabel(tag);
+---
+
+<BaseLayout title={label} description={`Published Posts tagged ${label}.`}>
+  <SiteHeader slot="header" currentPath={Astro.url.pathname} />
+  <section class="tag-page" id="top" aria-labelledby="tag-title">
+    <p>TAG / {tag.toUpperCase()}</p>
+    <h1 id="tag-title">{label}</h1>
+    {
+      posts.length > 0 ? (
+        <div>{posts.map((post, index) => <PostCard post={post} index={index + 1} />)}</div>
+      ) : (
+        <p class="empty">No published Posts use this controlled tag yet.</p>
+      )
+    }
+  </section>
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<style>
+  .tag-page {
+    max-width: 88rem;
+    min-height: 70vh;
+    margin-inline: auto;
+    padding: clamp(4rem, 9vw, 9rem) clamp(1rem, 4vw, 2rem);
+  }
+
+  .tag-page > p:first-child {
+    margin: 0 0 1rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    margin: 0 0 clamp(3rem, 7vw, 6rem);
+    font-size: clamp(3.7rem, 9vw, 9.5rem);
+    font-weight: 450;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+  }
+
+  .empty {
+    color: var(--muted);
+  }
+</style>

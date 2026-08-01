@@ -11,8 +11,10 @@ corrections:
   - date: 2026-07-31
     kind: correction
     summary: Corrected the fixture description.
+sources:
+  - title: Example source
+    url: https://example.com/source
+    description: A public source used by this content-contract fixture.
 ---
 
-## Corrections
-
-- 2026-07-31: Corrected the fixture description.
+The complete fixture validates structured correction and source metadata.

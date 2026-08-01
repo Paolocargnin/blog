@@ -3,7 +3,7 @@
  * production build. Changes here require a migration plan for existing
  * Workspace articles (ADR 0004).
  */
-export const CONTENT_CONTRACT_VERSION = 1;
+export const CONTENT_CONTRACT_VERSION = 2;
 
 export const contentContract = Object.freeze({
   version: CONTENT_CONTRACT_VERSION,
@@ -41,7 +41,7 @@ export const contentContract = Object.freeze({
       'publishedAt',
       'tags',
     ]),
-    optionalMetadata: Object.freeze(['updatedAt', 'corrections']),
+    optionalMetadata: Object.freeze(['updatedAt', 'corrections', 'sources']),
   }),
 });
 
