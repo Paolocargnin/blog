@@ -12,6 +12,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:cloudflare": "pnpm build && wrangler dev",
+    "deploy": "pnpm build && wrangler deploy",
     "format": "prettier --check README.md docs/editorial-skills.md docs/workspace.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
     "format:write": "prettier --write README.md docs/editorial-skills.md docs/workspace.md astro.config.mjs package.json prettier.config.mjs scripts src tests tsconfig.json",
     "type-check": "astro check",
@@ -45,6 +47,7 @@
     "@astrojs/check": "^0.9.10",
     "prettier": "^3.9.6",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "4.118.0"
   }
 }
