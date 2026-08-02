@@ -25,3 +25,24 @@ sync, recovery, and sensitive-source boundaries.
 Use `$blog-workflow` when an article's next editorial step is unclear. The
 [editorial skill suite](docs/editorial-skills.md) documents the router, review
 evidence, human gates, and deterministic lifecycle commands.
+
+## Publishing configuration
+
+The site exposes RSS at `/rss.xml`, a generated sitemap index at
+`/sitemap-index.xml`, and `robots.txt`. Canonical URLs and social metadata use
+`PUBLIC_SITE_URL`; Cloudflare Pages production should set it to the final
+canonical HTTPS origin. It falls back to `https://pc-the-blog.pages.dev` until
+a custom domain is configured.
+
+Cloudflare Web Analytics is intentionally opt-in and production-only. Add the
+following production environment value in the Cloudflare Pages dashboard after
+creating the Analytics site:
+
+- `PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` — the public Cloudflare beacon token.
+
+Do not configure that value for Preview deployments or local development. Do
+not also enable Cloudflare Pages' one-click Web Analytics injection: this site
+renders the beacon itself to keep its environment boundary explicit. The token
+is public browser configuration, but it is not committed. See `.env.example`
+for the complete, secret-free environment contract and [Editorial process](/editorial/)
+for the publication policy.

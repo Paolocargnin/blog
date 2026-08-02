@@ -17,7 +17,13 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  pageType="article"
+  publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt}
+>
   <SiteHeader slot="header" currentPath={Astro.url.pathname} />
   <article id="top">
     <header class="article-header">

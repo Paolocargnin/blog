@@ -1,0 +1,107 @@
+---
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Editorial process"
+  description="How PC - the blog uses AI assistance while Paolo Cargnin remains accountable for every published Post."
+>
+  <SiteHeader slot="header" currentPath={Astro.url.pathname} />
+  <article id="top" aria-labelledby="editorial-title">
+    <header>
+      <p>PUBLICATION RECORD</p>
+      <h1 id="editorial-title">Editorial process</h1>
+      <p class="deck">Writing is human work. Tools can assist; accountability cannot be delegated.</p>
+    </header>
+    <div class="prose">
+      <h2>Accountability</h2>
+      <p>
+        Paolo Cargnin is the Author of every Post and remains responsible for its argument,
+        accuracy, judgment, and publication. A Post is published only after human approval;
+        no automated system may publish on its own.
+      </p>
+
+      <h2>Where AI can help</h2>
+      <p>
+        AI may help frame questions, organize research, compare outlines, suggest revisions,
+        identify counterarguments, check consistency, and support technical or editorial work.
+        It may also help draft or revise language when Paolo judges that assistance useful.
+      </p>
+
+      <h2>What still requires human judgment</h2>
+      <p>
+        AI output is not a source and is treated as material to verify, not as evidence. Paolo
+        evaluates factual claims against attributable sources, reviews the final text, and
+        decides whether it is fair, useful, and ready to publish. Significant AI contributions
+        to a particular Post are disclosed on that Post when readers need that context.
+      </p>
+
+      <h2>Verification and corrections</h2>
+      <p>
+        The reporting, editing, and fact-checking process is proportionate to the claim's risk.
+        Private source material and unpublished work stay out of the public repository. If a
+        published Post needs a substantive correction, the change is recorded visibly on the
+        Post alongside its original publication record.
+      </p>
+    </div>
+  </article>
+  <SiteFooter slot="footer" />
+</BaseLayout>
+
+<style>
+  article {
+    max-width: 70rem;
+    margin-inline: auto;
+    padding: clamp(5rem, 10vw, 10rem) clamp(1rem, 4vw, 2rem) clamp(5rem, 10vw, 9rem);
+  }
+
+  header {
+    max-width: 58rem;
+  }
+
+  header > p:first-child {
+    margin: 0 0 1rem;
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  h1,
+  h2 {
+    font-weight: 450;
+    letter-spacing: -0.065em;
+    line-height: 0.9;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3.7rem, 9vw, 9.5rem);
+  }
+
+  .deck {
+    max-width: 48ch;
+    margin: 2rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
+    line-height: 1.65;
+  }
+
+  .prose {
+    max-width: var(--measure);
+    margin-top: clamp(4rem, 9vw, 7rem);
+    font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.28rem);
+    line-height: 1.74;
+  }
+
+  h2 {
+    margin: 3em 0 0.7em;
+    font-size: clamp(2rem, 1.5rem + 1.3vw, 3.5rem);
+  }
+
+  .prose p {
+    margin: 0 0 1.65em;
+  }
+</style>

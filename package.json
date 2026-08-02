@@ -18,6 +18,7 @@
     "test": "vitest run",
     "content:check": "node ./scripts/content-check.mjs",
     "content:check:public": "node ./scripts/content-check.mjs --public-only",
+    "site:check": "node ./scripts/site-check.mjs",
     "workspace:init": "node ./scripts/workspace-init.mjs",
     "workspace:create": "node ./scripts/workspace-create.mjs",
     "workspace:develop": "node ./scripts/workspace-develop.mjs",
@@ -31,9 +32,11 @@
     "editorial:digest": "node ./scripts/editorial-digest.mjs",
     "post:correct": "node ./scripts/post-correct.mjs",
     "skills:check": "node ./scripts/skill-check.mjs",
-    "quality": "pnpm format && pnpm type-check && pnpm test && pnpm skills:check && pnpm content:check && pnpm build"
+    "quality": "pnpm format && pnpm type-check && pnpm test && pnpm skills:check && pnpm content:check && pnpm build && pnpm site:check"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "astro": "^7.1.6",
     "yaml": "^2.9.0"
