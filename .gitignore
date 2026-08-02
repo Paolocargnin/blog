@@ -13,5 +13,6 @@ content/workspace/
 node_modules/
 dist/
 .astro/
+.wrangler/
 coverage/
 .DS_Store

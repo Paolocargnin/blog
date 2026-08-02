@@ -46,3 +46,15 @@ renders the beacon itself to keep its environment boundary explicit. The token
 is public browser configuration, but it is not committed. See `.env.example`
 for the complete, secret-free environment contract and [Editorial process](/editorial/)
 for the publication policy.
+
+## Cloudflare deployment
+
+The site is a pre-rendered Astro application served as static assets by the
+`blog` Cloudflare Worker. It does not use Astro's Cloudflare SSR adapter.
+
+- `pnpm preview:cloudflare` — build and preview the static Worker locally.
+- `pnpm deploy` — build and deploy the static Worker.
+
+Cloudflare Workers Builds should use `pnpm build` as its build command and
+`npx wrangler deploy` as its deploy command. The checked-in `wrangler.jsonc`
+prevents Cloudflare's automatic Astro setup from converting the site to SSR.
