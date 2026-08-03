@@ -4,10 +4,10 @@ status: accepted
 
 # Serve the pre-rendered blog through a static Cloudflare Worker
 
-Cloudflare's connected-repository flow creates a Cloudflare Worker at
-`blog.cargnin-paolo.workers.dev`. Its automatic Astro setup attempts to add the
-SSR adapter, which is unnecessary for this fully pre-rendered site and fails on
-the existing repository's missing starter-only `public/.assetsignore` file.
+Cloudflare's connected-repository flow creates a static Cloudflare Worker. Its
+automatic Astro setup attempts to add the SSR adapter, which is unnecessary for
+this fully pre-rendered site and fails on the existing repository's missing
+starter-only `public/.assetsignore` file.
 
 ## Decision
 
@@ -24,6 +24,5 @@ the existing repository's missing starter-only `public/.assetsignore` file.
 
 This supersedes only ADR 0011's choice of Cloudflare Pages. The public/private
 content boundary and privacy-first analytics policy remain unchanged. The
-Worker's generated `workers.dev` hostname is the initial production origin;
-when a custom domain is attached, `PUBLIC_SITE_URL` must be updated and the
-Worker redeployed.
+custom public origin `https://pctb.it` is canonical; if it changes,
+`PUBLIC_SITE_URL` must be updated and the Worker redeployed.

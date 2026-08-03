@@ -29,9 +29,9 @@ unavailable, is `pnpm deploy` from the reviewed commit.
 
 ## Production configuration and analytics
 
-Set `PUBLIC_SITE_URL=https://blog.cargnin-paolo.workers.dev` in the Worker
-production environment. When a custom domain becomes canonical, replace that
-value with its HTTPS origin and redeploy.
+Set `PUBLIC_SITE_URL=https://pctb.it` in the Worker production environment.
+`pctb.it` is the canonical public origin; if it changes, replace the value
+with the new HTTPS origin and redeploy.
 
 Create a Cloudflare Web Analytics site for the production hostname, then set
 its public beacon token as `PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN` in the
