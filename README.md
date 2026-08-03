@@ -31,8 +31,8 @@ evidence, human gates, and deterministic lifecycle commands.
 The site exposes RSS at `/rss.xml`, a generated sitemap index at
 `/sitemap-index.xml`, and `robots.txt`. Canonical URLs and social metadata use
 `PUBLIC_SITE_URL`; the Cloudflare Worker production environment should set it
-to the canonical HTTPS origin. It falls back to
-`https://blog.cargnin-paolo.workers.dev` until a custom domain is configured.
+to `https://pctb.it`, the canonical HTTPS origin. It also falls back to that
+origin when the environment variable is not set.
 
 Cloudflare Web Analytics is intentionally opt-in and production-only. Add the
 following production environment value in the Cloudflare dashboard after

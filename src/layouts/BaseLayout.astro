@@ -14,7 +14,7 @@ const siteName = 'PC - the blog';
 const documentTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 const canonicalUrl = new URL(
   Astro.url.pathname,
-  Astro.site ?? 'https://blog.cargnin-paolo.workers.dev',
+  Astro.site ?? 'https://pctb.it',
 ).href;
 const configuredAnalyticsToken = import.meta.env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim();
 const analyticsToken = import.meta.env.PROD && configuredAnalyticsToken
@@ -45,7 +45,7 @@ const structuredData =
           name: siteName,
           url: new URL(
             '/',
-            Astro.site ?? 'https://blog.cargnin-paolo.workers.dev',
+            Astro.site ?? 'https://pctb.it',
           ).href,
         },
         name: documentTitle,
