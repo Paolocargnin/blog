@@ -4,7 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 import { validatePublicContent } from './scripts/content-contract.mjs';
 
-const site = process.env.PUBLIC_SITE_URL || 'https://pc-the-blog.pages.dev';
+const site =
+  process.env.PUBLIC_SITE_URL || 'https://blog.cargnin-paolo.workers.dev';
 
 export default defineConfig({
   site,

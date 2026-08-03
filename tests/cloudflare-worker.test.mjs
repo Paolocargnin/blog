@@ -3,13 +3,20 @@ import { describe, expect, it } from 'vitest';
 
 describe('static Cloudflare Worker deployment', () => {
   it('deploys the pre-rendered dist directory without triggering Astro SSR auto-setup', async () => {
-    const [configuration, packageJson] = await Promise.all([
-      readFile('wrangler.jsonc', 'utf8'),
-      readFile('package.json', 'utf8'),
-    ]);
+    const [configuration, packageJson, workflow, deploymentGuide] =
+      await Promise.all([
+        readFile('wrangler.jsonc', 'utf8'),
+        readFile('package.json', 'utf8'),
+        readFile('.github/workflows/quality.yml', 'utf8'),
+        readFile('docs/deployment.md', 'utf8'),
+      ]);
     const pkg = JSON.parse(packageJson);
 
-    expect(JSON.parse(configuration)).toMatchObject({
+    const workerConfiguration = JSON.parse(
+      configuration.replace(/,\s*([}\]])/g, '$1'),
+    );
+
+    expect(workerConfiguration).toMatchObject({
       name: 'blog',
       assets: {
         directory: './dist',
@@ -18,5 +25,9 @@ describe('static Cloudflare Worker deployment', () => {
     });
     expect(pkg.devDependencies.wrangler).toBeDefined();
     expect(pkg.scripts.deploy).toBe('pnpm build && wrangler deploy');
+    expect(workflow).toContain('name: Quality');
+    expect(workflow).toContain('pnpm quality');
+    expect(deploymentGuide).toContain('pnpm exec wrangler rollback');
+    expect(deploymentGuide).toContain('Workers Builds');
   });
 });

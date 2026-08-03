@@ -14,7 +14,7 @@ const siteName = 'PC - the blog';
 const documentTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 const canonicalUrl = new URL(
   Astro.url.pathname,
-  Astro.site ?? 'https://pc-the-blog.pages.dev',
+  Astro.site ?? 'https://blog.cargnin-paolo.workers.dev',
 ).href;
 const configuredAnalyticsToken = import.meta.env.PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN?.trim();
 const analyticsToken = import.meta.env.PROD && configuredAnalyticsToken
@@ -43,7 +43,10 @@ const structuredData =
         isPartOf: {
           '@type': 'WebSite',
           name: siteName,
-          url: new URL('/', Astro.site ?? 'https://pc-the-blog.pages.dev').href,
+          url: new URL(
+            '/',
+            Astro.site ?? 'https://blog.cargnin-paolo.workers.dev',
+          ).href,
         },
         name: documentTitle,
         url: canonicalUrl,
