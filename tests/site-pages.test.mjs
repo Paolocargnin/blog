@@ -32,6 +32,17 @@ describe('reading surfaces', () => {
     expect(layout).toContain('PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN');
   });
 
+  it('declares a public favicon so browsers do not request a missing default icon', async () => {
+    const [layout, favicon] = await Promise.all([
+      read('src/layouts/BaseLayout.astro'),
+      read('public/favicon.svg'),
+    ]);
+
+    expect(layout).toContain('rel="icon"');
+    expect(layout).toContain('href="/favicon.svg"');
+    expect(favicon).toContain('<svg');
+  });
+
   it('provides the promised homepage, archive, controlled tags, Post, and 404 routes', async () => {
     const pages = await Promise.all([
       read('src/pages/index.astro'),
