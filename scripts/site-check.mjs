@@ -2,6 +2,7 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
 const outputDirectory = path.resolve('dist');
+const postsDirectory = path.resolve('src/content/posts');
 
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -44,6 +45,28 @@ const htmlFiles = outputFiles.filter((filePath) => filePath.endsWith('.html'));
 if (htmlFiles.length === 0) {
   throw new Error(
     'Site check failed: no built HTML files found. Run pnpm build first.',
+  );
+}
+
+const publicPostSlugs = (await readdir(postsDirectory, { withFileTypes: true }))
+  .filter((entry) => entry.isFile() && path.extname(entry.name) === '.md')
+  .map((entry) => path.basename(entry.name, '.md'))
+  .sort();
+const builtPostSlugs = (
+  await readdir(path.join(outputDirectory, 'posts'), { withFileTypes: true })
+)
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .sort();
+const missingPostRoutes = publicPostSlugs.filter(
+  (slug) => !builtPostSlugs.includes(slug),
+);
+const unexpectedPostRoutes = builtPostSlugs.filter(
+  (slug) => !publicPostSlugs.includes(slug),
+);
+if (missingPostRoutes.length > 0 || unexpectedPostRoutes.length > 0) {
+  throw new Error(
+    `Site check failed: built Post routes do not match public Post sources (missing: ${missingPostRoutes.join(', ') || 'none'}; unexpected: ${unexpectedPostRoutes.join(', ') || 'none'}).`,
   );
 }
 
