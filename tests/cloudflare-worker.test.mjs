@@ -30,6 +30,7 @@ describe('static Cloudflare Worker deployment', () => {
       },
     });
     expect(pkg.devDependencies.wrangler).toBeDefined();
+    expect(pkg.scripts.build).toBe('astro build --force');
     expect(pkg.scripts.deploy).toBe('pnpm build && wrangler deploy');
     expect(astroConfiguration).toContain("'https://pctb.it'");
     expect(workflow).toContain('name: Quality');

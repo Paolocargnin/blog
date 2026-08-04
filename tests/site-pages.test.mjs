@@ -12,6 +12,15 @@ describe('reading surfaces', () => {
     expect(layout).toContain("'JetBrains Mono Variable'");
   });
 
+  it('keeps the page shell free of a minimum width so enlarged text can reflow', async () => {
+    const layout = await read('src/layouts/BaseLayout.astro');
+    const bodyRule = layout.match(/\n  body \{([\s\S]*?)\n  \}/)?.[1];
+
+    expect(bodyRule).toBeDefined();
+    expect(bodyRule).not.toMatch(/\bmin-width\s*:/);
+    expect(bodyRule).toContain('overflow-wrap: anywhere;');
+  });
+
   it('keeps canonical, social, structured, and production-only analytics metadata in the layout', async () => {
     const layout = await read('src/layouts/BaseLayout.astro');
 
@@ -21,6 +30,17 @@ describe('reading surfaces', () => {
     expect(layout).toContain('application/ld+json');
     expect(layout).toContain('import.meta.env.PROD');
     expect(layout).toContain('PUBLIC_CLOUDFLARE_WEB_ANALYTICS_TOKEN');
+  });
+
+  it('declares a public favicon so browsers do not request a missing default icon', async () => {
+    const [layout, favicon] = await Promise.all([
+      read('src/layouts/BaseLayout.astro'),
+      read('public/favicon.svg'),
+    ]);
+
+    expect(layout).toContain('rel="icon"');
+    expect(layout).toContain('href="/favicon.svg"');
+    expect(favicon).toContain('<svg');
   });
 
   it('provides the promised homepage, archive, controlled tags, Post, and 404 routes', async () => {

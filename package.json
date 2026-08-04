@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build --force",
     "preview": "astro preview",
     "preview:cloudflare": "pnpm build && wrangler dev",
     "deploy": "pnpm build && wrangler deploy",
