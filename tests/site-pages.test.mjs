@@ -12,6 +12,15 @@ describe('reading surfaces', () => {
     expect(layout).toContain("'JetBrains Mono Variable'");
   });
 
+  it('keeps the page shell free of a minimum width so enlarged text can reflow', async () => {
+    const layout = await read('src/layouts/BaseLayout.astro');
+    const bodyRule = layout.match(/\n  body \{([\s\S]*?)\n  \}/)?.[1];
+
+    expect(bodyRule).toBeDefined();
+    expect(bodyRule).not.toMatch(/\bmin-width\s*:/);
+    expect(bodyRule).toContain('overflow-wrap: anywhere;');
+  });
+
   it('keeps canonical, social, structured, and production-only analytics metadata in the layout', async () => {
     const layout = await read('src/layouts/BaseLayout.astro');
 
