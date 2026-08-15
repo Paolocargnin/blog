@@ -26,6 +26,15 @@ Use `$blog-workflow` when an article's next editorial step is unclear. The
 [editorial skill suite](docs/editorial-skills.md) documents the router, review
 evidence, human gates, and deterministic lifecycle commands.
 
+## Fork this project
+
+The public site, editorial skills, lifecycle commands, and tests are reusable,
+but a fork needs its own publication identity, private Workspace repository,
+and deployment configuration. Follow the [forking guide](docs/forking.md) for
+the complete setup and validation path. The maintained deployment recipe is
+Cloudflare-first; other static hosts are plausible but not yet tested or
+supported here.
+
 ## Publishing configuration
 
 The site exposes RSS at `/rss.xml`, a generated sitemap index at

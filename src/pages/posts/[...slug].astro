@@ -164,7 +164,7 @@ const { Content } = await render(post);
     inset-block-end: -0.18em;
     pointer-events: none;
     color: var(--signal);
-    font-size: clamp(3.575rem, 18.2vw, 10.8rem);
+    font-size: clamp(3.575rem, 18.2vw, 5.2rem);
     font-weight: 700;
     letter-spacing: -0.13em;
     line-height: 0.8;
@@ -174,6 +174,10 @@ const { Content } = await render(post);
   @media (min-width: 43rem) {
     h1 {
       font-size: clamp(5.4rem, 7.6vw, 10.8rem);
+    }
+
+    .floating-number {
+      font-size: clamp(5.4rem, 12.6vw, 10.8rem);
     }
   }
 
