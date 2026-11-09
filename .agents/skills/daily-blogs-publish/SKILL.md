@@ -18,6 +18,15 @@ Read first: `CONTEXT.md`, `docs/adr/0019-ai-generated-devlog-posts.md`, ADRs
 
 ## Publish
 
+### 0. Wait for the end of Paolo's day
+
+Posts cover a whole working day, so they are written only after Paolo says he
+has finished for today ("ho finito per oggi", or similar). If he runs the skill
+while he is still working, do the preparation (steps 1–3: setup, facts, media
+requests and captures), tell him what is ready, and stop until he says he is
+done. Then gather again, because the day has moved on, and only then write.
+Never write or publish Posts before he says so.
+
 ### 1. Set up
 
 - `git status`; preserve unrelated work. `git fetch origin main`, then branch
@@ -49,6 +58,11 @@ a private scratch file, never in the repository.
   context; never publish its content unless Paolo asks.
 - Group by project. Write about the projects Paolo named; otherwise propose the
   one to three that moved most and ask before writing.
+- **Introductions.** Search `src/content/posts/` for each project. A project
+  that has never been introduced on the blog gets an introduction Post (what it
+  is, why Paolo started it, where it lives, what it looks like) before or
+  alongside its first update. One run can publish several Posts, and Claude may
+  add introductions for other projects it judges worth one.
 
 ### 3. Get real visuals
 
