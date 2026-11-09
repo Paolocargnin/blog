@@ -221,6 +221,14 @@ function validatePostMetadata(data, filePath, errors) {
   if ('sources' in data) {
     validateSources(data.sources, filePath, errors);
   }
+
+  // ADR 0019: an AI-generated Post carries `aiGenerated: true` until Paolo
+  // reviews it; review removes the field instead of setting it to false.
+  if ('aiGenerated' in data && data.aiGenerated !== true) {
+    errors.push(
+      `${filePath}: aiGenerated must be true; remove the field once the Post has been reviewed.`,
+    );
+  }
 }
 
 function validatePostBody(body, filePath, errors) {

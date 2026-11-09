@@ -22,7 +22,10 @@ install`.
 See [the private Workspace guide](docs/workspace.md) for setup, lifecycle,
 sync, recovery, and sensitive-source boundaries.
 
-Use `$blog-workflow` when an article's next editorial step is unclear. The
+Use `$blog-workflow` when an article's next editorial step is unclear. Use
+`$daily-blogs-publish` for AI-generated project updates (ADR 0019): it writes
+them from recent Claude sessions and publishes them behind a visible notice
+until Paolo reviews them. The
 [editorial skill suite](docs/editorial-skills.md) documents the router, review
 evidence, human gates, and deterministic lifecycle commands.
 

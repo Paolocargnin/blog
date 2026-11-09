@@ -12,7 +12,9 @@ export async function GET(context) {
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,
-      description: post.data.description,
+      description: post.data.aiGenerated
+        ? `[AI-generated, not yet reviewed] ${post.data.description}`
+        : post.data.description,
       link: `/posts/${post.id}/`,
       pubDate: post.data.publishedAt,
     })),

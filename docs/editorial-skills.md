@@ -78,3 +78,12 @@ The suite and its evidence schema are versioned with this repository. Change
 preserves existing Workspace articles and review records. Update the router,
 skills, deterministic scripts, tests, and this document together; use evidence
 from real writing sessions to justify backward-compatible improvements.
+
+## AI-generated devlog Posts
+
+`$daily-blogs-publish` is outside the Workspace lifecycle above. Paolo runs it
+by hand to turn his recent Claude sessions and repositories into AI-generated
+Posts that carry a visible notice until he reviews them (ADR 0019). It creates
+Posts with `pnpm post:new-ai`, captures real screenshots and recordings, and
+opens a pull request that still needs the usual approval. Its Review mode
+removes the notice with `pnpm post:review` once Paolo approves the Post.

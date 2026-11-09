@@ -44,6 +44,7 @@ const posts = defineCollection({
         }),
       corrections: z.array(correction).min(1).optional(),
       sources: z.array(source).min(1).optional(),
+      aiGenerated: z.literal(true).optional(),
     })
     .strict()
     .superRefine((post, context) => {
