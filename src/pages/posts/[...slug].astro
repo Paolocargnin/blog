@@ -167,6 +167,11 @@ const { Content } = await render(post);
     border: 1px solid var(--line);
   }
 
+  .prose :global(img) {
+    width: auto;
+    max-height: 85vh;
+  }
+
   .prose :global(figure) {
     margin: 2.5em 0;
   }
