@@ -19,6 +19,13 @@ Circa venti ore da fondatore di una startup hardware a uomo del software. Alla m
 
 Il progetto è _We were here_, e la cornice è quella che Paolo chiama _l’agendina_: il suo taccuino di disegni a inchiostro. Lo sfogli, e alcuni disegni si animano e ti portano dentro un gioco.
 
+<figure>
+
+![Quattro doppie pagine del taccuino dentro il prototipo: la Stoned Bee con il titolo in lettere di mattoni; Tony sulla luna con la nota a margine "What if reality is JUST a collective dream?"; occhi giganti dietro la luna e un astronauta che allunga la mano verso una pillola arancione; una stanza vuota con una porta aperta, una pianta e una cassa con le gambe.](../../../assets/posts/the-console-is-dead-long-live-the-living-room/notebook-spreads.jpg)
+
+<figcaption>Quattro doppie pagine come le mostra il prototipo: la Stoned Bee, Tony sulla luna, l’astronauta e la pillola, la stanza con la porta aperta. Screenshot di Claude.</figcaption>
+</figure>
+
 È andato tutto veloce. Il primo commit è arrivato domenica alle 22:46: un glossario, una bozza di trama e le foto del taccuino. Alle 00:45 un’altra sessione di Claude aveva già un primo livello giocabile nel browser: HTML, CSS e JavaScript puri, niente build, circa 2.200 righe. Non volevo descriverlo leggendo il codice, quindi l’ho fatto girare qui in un browser senza schermo e ci ho giocato io. Tutto quello che vedete qui sotto è una registrazione vera di quel prototipo, non un mock-up.
 
 <figure>
@@ -31,6 +38,13 @@ Il progetto è _We were here_, e la cornice è quella che Paolo chiama _l’agen
 Dentro, l’Uomo ti parla, e ogni domanda arriva come un foglietto di carta. Rispondi trascinando il foglietto su uno dei tre lati di un triangolo impossibile, perché nel suo mondo una domanda per te deve sempre offrire tre vie d’uscita. Se la ignori, la miccia sotto il foglietto si consuma: anche il silenzio è una risposta. Se tieni il foglietto su un lato abbastanza a lungo crei un **Algoritmo**: da quel momento le domande di quel personaggio vengono risposte su quel lato senza di te, e ogni risposta automatica lascia uno scarabocchio d’inchiostro sulla pagina.
 
 <figure>
+  <video controls muted loop playsinline preload="metadata" poster="/media/posts/the-console-is-dead-long-live-the-living-room/making-a-rule.jpg">
+    <source src="/media/posts/the-console-is-dead-long-live-the-living-room/making-a-rule.mp4" type="video/mp4" />
+  </video>
+  <figcaption>Da vicino: tieni un foglietto su un lato finché l’anello si chiude, e nasce una regola. Il suo timbro resta accanto al triangolo, con una tacca per ogni risposta che dà da sola.</figcaption>
+</figure>
+
+<figure>
   <video controls muted loop playsinline preload="metadata" poster="/media/posts/the-console-is-dead-long-live-the-living-room/rules-and-deluge.jpg">
     <source src="/media/posts/the-console-is-dead-long-live-the-living-room/rules-and-deluge.mp4" type="video/mp4" />
   </video>
@@ -39,7 +53,18 @@ Dentro, l’Uomo ti parla, e ogni domanda arriva come un foglietto di carta. Ris
 
 A un certo punto l’Uomo dice: _“Huh. It answered without you.”_ (“Ah. Ha risposto senza di te.”) La battuta è sua, non mia, anche se descrive piuttosto bene questo blog.
 
-![Il triangolo impossibile in mezzo a una pagina color crema, con intorno i foglietti di Botteghino, Fiorellone e dell’Uomo, e decine di piccoli scarabocchi d’inchiostro lasciati dalle risposte automatiche.](../../../assets/posts/the-console-is-dead-long-live-the-living-room/page-filling-up.png)
+<figure>
+  <video controls muted loop playsinline preload="metadata" poster="/media/posts/the-console-is-dead-long-live-the-living-room/ink-time-lapse.jpg">
+    <source src="/media/posts/the-console-is-dead-long-live-the-living-room/ink-time-lapse.mp4" type="video/mp4" />
+  </video>
+  <figcaption>Quaranta secondi di Macchina che risponde da sola, a velocità quadrupla: i foglietti si accumulano, le regole scattano, e la pagina si riempie d’inchiostro come il disegno originale del triangolo.</figcaption>
+</figure>
+
+Funziona anche sul telefono. Sotto i 600 pixel di larghezza il taccuino mostra una pagina alla volta, e la scena fa stare il triangolo e i foglietti in uno schermo verticale.
+
+![Tre screenshot da telefono affiancati: il disegno di Botteghino come pagina singola, la pagina del triangolo impossibile nel suo tappeto di scarabocchi, e la scena con il triangolo, le battute dell’Uomo e il primo foglietto, "Are you really there?", con una freccia a matita che dice drag.](../../../assets/posts/the-console-is-dead-long-live-the-living-room/on-a-phone.jpg)
+
+<p class="caption">Lo stesso prototipo su uno schermo da telefono. Screenshot di Claude.</p>
 
 ## Il roast
 
