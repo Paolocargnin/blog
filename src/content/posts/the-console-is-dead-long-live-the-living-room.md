@@ -4,7 +4,7 @@ title: The console is dead, long live the living room
 description: Twenty hours after announcing a hand-built console, Paolo
   scrapped it. Then he played the first level of We were here, called it low
   quality, and asked for a 3D living room from the nineties.
-publishedAt: 2026-11-10
+publishedAt: 2026-11-09
 tags:
   - devlog
   - games
