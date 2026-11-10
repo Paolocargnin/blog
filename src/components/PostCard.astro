@@ -1,4 +1,5 @@
 ---
+import AiNotice from './AiNotice.astro';
 import { formatDate, type Post } from '../lib/posts';
 
 interface Props {
@@ -12,7 +13,7 @@ const { index, post } = Astro.props;
 <article class="post-card">
   <p class="post-number" aria-hidden="true">{String(index).padStart(3, '0')}</p>
   <div>
-    <p class="post-meta"><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time></p>
+    <p class="post-meta"><time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>{post.data.aiGenerated && <AiNotice variant="badge" />}</p>
     <h2><a href={`/posts/${post.id}/`}>{post.data.title}</a></h2>
     <p class="description">{post.data.description}</p>
   </div>

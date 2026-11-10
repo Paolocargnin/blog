@@ -1,0 +1,6 @@
+interface:
+  display_name: "Daily Blogs Publish"
+  short_description: "Turn recent Claude sessions into AI-generated devlog Posts"
+  default_prompt: "Use $daily-blogs-publish to write today's devlog Posts from my recent sessions."
+policy:
+  allow_implicit_invocation: false

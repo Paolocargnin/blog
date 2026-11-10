@@ -29,7 +29,9 @@ export const contentContract = Object.freeze({
     blogging: 'Blogging',
     craft: 'Craft',
     design: 'Design',
+    devlog: 'Devlog',
     engineering: 'Engineering',
+    games: 'Games',
     systems: 'Systems',
     writing: 'Writing',
   }),
@@ -41,7 +43,12 @@ export const contentContract = Object.freeze({
       'publishedAt',
       'tags',
     ]),
-    optionalMetadata: Object.freeze(['updatedAt', 'corrections', 'sources']),
+    optionalMetadata: Object.freeze([
+      'updatedAt',
+      'corrections',
+      'sources',
+      'aiGenerated',
+    ]),
   }),
 });
 

@@ -1,0 +1,80 @@
+---
+/**
+ * ADR 0019: shown on every Post that still carries `aiGenerated: true`.
+ * It disappears when Paolo reviews the Post and the field is removed.
+ */
+interface Props {
+  lang?: 'en' | 'it';
+  variant?: 'full' | 'badge';
+}
+
+const { lang = 'en', variant = 'full' } = Astro.props;
+const text = {
+  en: {
+    badge: 'AI-generated · unreviewed',
+    label: 'AI-GENERATED / NOT YET REVIEWED',
+    body: 'Claude wrote this whole Post on its own, from what I did in my Claude sessions. I haven’t reviewed it yet: I’ll revisit it soon, and this notice goes away once I have. Until then, expect mistakes, opinions I don’t hold, and jokes at my expense.',
+    link: 'How AI-generated Posts work',
+  },
+  it: {
+    badge: 'Generato dall’IA · non rivisto',
+    label: 'GENERATO DALL’IA / NON ANCORA RIVISTO',
+    body: 'Claude ha scritto questo Post da solo, a partire da quello che ho fatto nelle mie sessioni con Claude. Non l’ho ancora rivisto: lo farò presto, e questo avviso sparirà quando l’avrò fatto. Fino ad allora aspettati errori, opinioni che non ho e battute alle mie spalle.',
+    link: 'Come funzionano i Post generati dall’IA (in inglese)',
+  },
+}[lang];
+---
+
+{
+  variant === 'badge' ? (
+    <span class="ai-badge">{text.badge}</span>
+  ) : (
+    <aside class="ai-notice" role="note" aria-labelledby="ai-notice-title">
+      <p class="ai-notice-label" id="ai-notice-title">{text.label}</p>
+      <p>{text.body}</p>
+      <p class="ai-notice-link"><a href="/editorial/#ai-generated-posts">{text.link}</a></p>
+    </aside>
+  )
+}
+
+<style>
+  .ai-notice {
+    box-sizing: border-box;
+    width: min(var(--measure), calc(100% - 2rem));
+    margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+    padding: 1.25rem 1.4rem;
+    border: 1px dashed var(--signal);
+    background: var(--panel);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .ai-notice p {
+    margin: 0 0 0.6rem;
+  }
+
+  .ai-notice p:last-child {
+    margin-bottom: 0;
+  }
+
+  .ai-notice-label,
+  .ai-badge {
+    color: var(--signal);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+  }
+
+  .ai-notice-link a {
+    color: var(--signal);
+    font-size: 0.85rem;
+  }
+
+  .ai-badge {
+    display: inline-block;
+    margin-left: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border: 1px dashed var(--signal);
+    text-transform: uppercase;
+  }
+</style>

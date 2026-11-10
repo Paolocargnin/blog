@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+
+import PostArticle from '../../../components/PostArticle.astro';
+
+// ADR 0020: the Italian translation of a Post, at the Post's own slug.
+export async function getStaticPaths() {
+  const translations = await getCollection('translations', (entry) =>
+    entry.id.startsWith('it/'),
+  );
+  return Promise.all(
+    translations.map(async (translation) => {
+      const slug = translation.id.slice('it/'.length);
+      const post = await getEntry('posts', slug);
+      if (!post) {
+        throw new Error(`Translation it/${slug} has no matching public Post.`);
+      }
+      return { params: { slug }, props: { post, translation } };
+    }),
+  );
+}
+
+const { post, translation } = Astro.props;
+const { Content } = await render(translation);
+---
+
+<PostArticle
+  post={post}
+  lang="it"
+  title={translation.data.title}
+  description={translation.data.description}
+  corrections={translation.data.corrections}
+  alternate={{ href: `/posts/${post.id}/`, lang: 'en' }}
+>
+  <Content />
+</PostArticle>

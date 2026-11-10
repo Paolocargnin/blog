@@ -44,6 +44,14 @@ _Avoid_: Category, free-form keyword
 A post-publication change that alters a factual claim or the meaning a reader takes from a Post, accompanied by a visible dated explanation.
 _Avoid_: Typo fix, silent edit
 
+**AI-generated Post**:
+A Post that Claude wrote on its own from Paolo's work sessions, published with a visible notice until Paolo reviews it (ADR 0019).
+_Avoid_: Draft, ghostwritten Post
+
+**Translation**:
+The Italian version of a Post, served beside it at /it/posts/<slug>/, which inherits everything but its words from the Post (ADR 0020).
+_Avoid_: Italian Post, localised copy
+
 **Post**:
 An article that has entered the public body of published work.
 _Avoid_: Draft, content item

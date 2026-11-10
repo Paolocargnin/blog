@@ -3,24 +3,29 @@ import { formatDate, type Post } from '../lib/posts';
 
 interface Props {
   corrections: Post['data']['corrections'];
+  lang?: 'en' | 'it';
 }
 
-const { corrections } = Astro.props;
+const { corrections, lang = 'en' } = Astro.props;
+const text = {
+  en: { log: 'CHANGE LOG', title: 'Corrections', correction: 'correction', revision: 'revision' },
+  it: { log: 'REGISTRO DELLE MODIFICHE', title: 'Correzioni', correction: 'correzione', revision: 'revisione' },
+}[lang];
 ---
 
 {
   corrections && (
     <section class="corrections" aria-labelledby="corrections-title">
       <div>
-        <p>CHANGE LOG / {String(corrections.length).padStart(2, '0')}</p>
-        <h2 id="corrections-title">Corrections</h2>
+        <p>{text.log} / {String(corrections.length).padStart(2, '0')}</p>
+        <h2 id="corrections-title">{text.title}</h2>
       </div>
       <ol>
         {corrections.map((correction) => (
           <li>
             <time datetime={correction.date.toISOString()}>{formatDate(correction.date)}</time>
             <p>{correction.summary}</p>
-            <span>{correction.kind}</span>
+            <span>{text[correction.kind]}</span>
           </li>
         ))}
       </ol>

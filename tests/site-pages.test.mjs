@@ -58,8 +58,10 @@ describe('reading surfaces', () => {
 
     expect(pages[0]).toContain('RECENT POSTS');
     expect(pages[1]).toContain('ALL POSTS');
-    expect(pages[2]).toContain('<Corrections');
-    expect(pages[2]).toContain('<Sources');
+    expect(pages[2]).toContain('<PostArticle');
+    const article = await read('src/components/PostArticle.astro');
+    expect(article).toContain('<Corrections');
+    expect(article).toContain('<Sources');
     expect(pages[3]).toContain('controlledTagIds');
     expect(pages[4]).toContain('getStaticPaths');
     expect(pages[5]).toContain('404 / MISSING FROM THE INDEX');
@@ -69,7 +71,7 @@ describe('reading surfaces', () => {
   });
 
   it('keeps long prose and code responsive in the Post route', async () => {
-    const page = await read('src/pages/posts/[...slug].astro');
+    const page = await read('src/components/PostArticle.astro');
 
     expect(page).toContain('max-width: var(--measure)');
     expect(page).toContain('width: min(80rem, calc(100vw - 2rem))');
