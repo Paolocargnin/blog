@@ -4,24 +4,35 @@
  * It disappears when Paolo reviews the Post and the field is removed.
  */
 interface Props {
+  lang?: 'en' | 'it';
   variant?: 'full' | 'badge';
 }
 
-const { variant = 'full' } = Astro.props;
+const { lang = 'en', variant = 'full' } = Astro.props;
+const text = {
+  en: {
+    badge: 'AI-generated · unreviewed',
+    label: 'AI-GENERATED / NOT YET REVIEWED',
+    body: 'Claude wrote this whole Post on its own, from what I did in my Claude sessions. I haven’t reviewed it yet: I’ll revisit it soon, and this notice goes away once I have. Until then, expect mistakes, opinions I don’t hold, and jokes at my expense.',
+    link: 'How AI-generated Posts work',
+  },
+  it: {
+    badge: 'Generato dall’IA · non rivisto',
+    label: 'GENERATO DALL’IA / NON ANCORA RIVISTO',
+    body: 'Claude ha scritto questo Post da solo, a partire da quello che ho fatto nelle mie sessioni con Claude. Non l’ho ancora rivisto: lo farò presto, e questo avviso sparirà quando l’avrò fatto. Fino ad allora aspettati errori, opinioni che non ho e battute alle mie spalle.',
+    link: 'Come funzionano i Post generati dall’IA (in inglese)',
+  },
+}[lang];
 ---
 
 {
   variant === 'badge' ? (
-    <span class="ai-badge">AI-generated · unreviewed</span>
+    <span class="ai-badge">{text.badge}</span>
   ) : (
     <aside class="ai-notice" role="note" aria-labelledby="ai-notice-title">
-      <p class="ai-notice-label" id="ai-notice-title">AI-GENERATED / NOT YET REVIEWED</p>
-      <p>
-        Claude wrote this whole Post on its own, from what I did in my Claude sessions. I haven’t
-        reviewed it yet: I’ll revisit it soon, and this notice goes away once I have. Until then,
-        expect mistakes, opinions I don’t hold, and jokes at my expense.
-      </p>
-      <p class="ai-notice-link"><a href="/editorial/#ai-generated-posts">How AI-generated Posts work</a></p>
+      <p class="ai-notice-label" id="ai-notice-title">{text.label}</p>
+      <p>{text.body}</p>
+      <p class="ai-notice-link"><a href="/editorial/#ai-generated-posts">{text.link}</a></p>
     </aside>
   )
 }

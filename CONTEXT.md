@@ -48,6 +48,10 @@ _Avoid_: Typo fix, silent edit
 A Post that Claude wrote on its own from Paolo's work sessions, published with a visible notice until Paolo reviews it (ADR 0019).
 _Avoid_: Draft, ghostwritten Post
 
+**Translation**:
+The Italian version of a Post, served beside it at /it/posts/<slug>/, which inherits everything but its words from the Post (ADR 0020).
+_Avoid_: Italian Post, localised copy
+
 **Post**:
 An article that has entered the public body of published work.
 _Avoid_: Draft, content item

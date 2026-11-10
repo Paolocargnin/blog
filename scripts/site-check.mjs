@@ -70,6 +70,23 @@ if (missingPostRoutes.length > 0 || unexpectedPostRoutes.length > 0) {
   );
 }
 
+// ADR 0020: every Italian translation is built at /it/posts/<slug>/.
+const italianDirectory = path.resolve('src/content/translations/it');
+let italianSlugs = [];
+try {
+  italianSlugs = (await readdir(italianDirectory, { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && path.extname(entry.name) === '.md')
+    .map((entry) => path.basename(entry.name, '.md'));
+} catch {
+  italianSlugs = [];
+}
+for (const slug of italianSlugs) {
+  await assertFile(
+    outputFileForPathname(`/it/posts/${slug}/`),
+    'Site check failed: missing Italian translation route',
+  );
+}
+
 for (const htmlFile of htmlFiles) {
   const html = await readFile(htmlFile, 'utf8');
   const relativePath = path.relative(outputDirectory, htmlFile);

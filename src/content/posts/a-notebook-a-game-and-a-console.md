@@ -20,6 +20,17 @@ corrections:
 
 I have a notebook. A small one, with a black elastic band, filled page after page with ink drawings.
 
+There’s Botteghino, a greedy and very rich barrel. His page lists his main trait: he’s the biggest tax evader around, and he never pays because everyone thinks he’s just a figure of speech.
+
+<figure>
+
+![An open notebook held in one hand. On the right page, a grumpy wooden barrel with a face, drawn in black ink with dense hatching. On the left page, the name Botteghino in big brushy letters, a handwritten description and a small stack of coins.](../../assets/posts/a-notebook-a-game-and-a-console/botteghino.jpg)
+
+<figcaption>Botteghino, with his page of notes.</figcaption>
+</figure>
+
+Then there’s Fiorellone, an enormous, romantic flower. A bee that mistakes a joint for a firefly. And the Bergole: tadpole-shaped spirits that stand for an emotion, or for someone who is gone.
+
 <figure>
 
 ![An open notebook held in one hand. Both pages are full of Bergole, tadpole-shaped spirits drawn in black ink, some coloured orange, green, purple and yellow, with handwritten notes on how to draw them.](../../assets/posts/a-notebook-a-game-and-a-console/bergole.jpg)
@@ -27,7 +38,7 @@ I have a notebook. A small one, with a black elastic band, filled page after pag
 <figcaption>The very first Bergole, with my notes on how to draw them.</figcaption>
 </figure>
 
-There’s Botteghino, a greedy and very rich barrel. Fiorellone, an enormous, romantic flower. A bee that mistakes a joint for a firefly. And the Bergole: tadpole-shaped spirits that stand for an emotion, or for someone who is gone. One of my notes next to them says: _“It’s not yet clear what the difference is between a beautiful and an ugly Bergola.”_
+One of the notes next to them says: _“It’s not yet clear what the difference is between a beautiful and an ugly Bergola.”_
 
 For a long time it was just a notebook. Now I want it to become something you can play.
 

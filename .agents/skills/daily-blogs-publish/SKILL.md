@@ -144,6 +144,14 @@ The voice:
   punchy title, description of one or two sentences, one to four Tags with
   `devlog` first.
 
+**Italian.** Every Post ships with its Italian translation (ADR 0020) in
+`src/content/translations/it/<slug>.md`, with frontmatter `title`,
+`description` and, if the Post has visible corrections, `corrections` with the
+same dates and kinds and translated summaries. Translate the Post, don't
+summarise it: same structure, same jokes where they survive, same media (the
+paths change to `../../../assets/posts/<slug>/…` because the file sits one
+folder deeper). Quotes from Paolo go back to his original Italian words.
+
 **Retractions.** When Paolo takes back something an earlier Post said, add a
 dated `correction` to that Post with `pnpm post:correct -- --slug <slug>
 --replacement <file> --kind correction --approved-by "Paolo Cargnin" --date
@@ -154,7 +162,8 @@ directly, but still add the dated correction so readers see the change.
 
 ### 5. Check
 
-- `pnpm quality` must pass.
+- `pnpm quality` must pass. It also checks every translation against its Post.
+- Open each Post in both languages.
 - `pnpm build && pnpm preview`, then open every new Post with Playwright on a
   phone and a desktop viewport and look at the screenshots: notice visible,
   media loading, nothing overflowing. Fix what you see.
@@ -186,7 +195,8 @@ post …").
    `pnpm post:review -- --slug <slug> --approved-by "Paolo Cargnin"`. It removes
    the notice, sets `updatedAt` and adds a visible dated revision. Never run it
    on your own judgement.
-3. `pnpm quality`, commit on a fresh branch, open a pull request.
+3. Apply the same edits to the Italian translation, then `pnpm quality`, commit
+   on a fresh branch, open a pull request.
 
 Finish at a reviewable pull request in which the Post no longer carries the
 notice and its history shows the review.

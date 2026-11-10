@@ -478,11 +478,100 @@ async function assertWorkspaceIsPrivate(
   }
 }
 
+// ADR 0020: an optional Italian translation of a public Post lives in
+// src/content/translations/it/<slug>.md, beside the Posts directory. It carries
+// only what changes with the language; everything else comes from the Post.
+export const translationLanguages = Object.freeze(['it']);
+const translationFields = new Set(['title', 'description', 'corrections']);
+
+function translationsDirectoryFor(postsDirectory) {
+  return path.join(path.dirname(postsDirectory), 'translations');
+}
+
+async function validateTranslationsDirectory(
+  translationsDirectory,
+  postsDirectory,
+  errors,
+) {
+  if (!(await exists(translationsDirectory))) {
+    return;
+  }
+  const entries = await readdir(translationsDirectory, { withFileTypes: true });
+  for (const entry of entries) {
+    const entryPath = path.join(translationsDirectory, entry.name);
+    if (!entry.isDirectory() || !translationLanguages.includes(entry.name)) {
+      errors.push(
+        `${entryPath}: translations live in one folder per language (${translationLanguages.join(', ')}).`,
+      );
+      continue;
+    }
+    for (const file of await readdir(entryPath, { withFileTypes: true })) {
+      const filePath = path.join(entryPath, file.name);
+      if (!file.isFile() || path.extname(file.name) !== markdownExtension) {
+        errors.push(
+          `${filePath}: only Markdown translation files are allowed.`,
+        );
+        continue;
+      }
+      const slug = path.basename(file.name, markdownExtension);
+      const postPath = path.join(postsDirectory, `${slug}.md`);
+      if (!(await exists(postPath))) {
+        errors.push(
+          `${filePath}: translates ${slug}, but there is no public Post with that slug.`,
+        );
+        continue;
+      }
+      const { data } = await readMarkdown(filePath, errors);
+      for (const field of Object.keys(data)) {
+        if (!translationFields.has(field)) {
+          errors.push(
+            `${filePath}: ${field} is not translation metadata; it comes from the Post.`,
+          );
+        }
+      }
+      requireString(data, 'title', filePath, errors);
+      requireString(data, 'description', filePath, errors);
+      const post = await readMarkdown(postPath, errors);
+      const original = post.data.corrections ?? [];
+      if ('corrections' in data) {
+        const translated = Array.isArray(data.corrections)
+          ? data.corrections
+          : [];
+        const matches =
+          translated.length === original.length &&
+          translated.every(
+            (correction, index) =>
+              isPlainObject(correction) &&
+              correction.date === original[index].date &&
+              correction.kind === original[index].kind &&
+              typeof correction.summary === 'string' &&
+              correction.summary.trim() !== '',
+          );
+        if (!matches) {
+          errors.push(
+            `${filePath}: corrections must translate every correction of the Post, with the same dates and kinds.`,
+          );
+        }
+      } else if (original.length > 0) {
+        errors.push(
+          `${filePath}: the Post has visible corrections, so the translation must translate them.`,
+        );
+      }
+    }
+  }
+}
+
 export async function validatePublicContent({
   postsDirectory = path.join(projectRoot, 'src/content/posts'),
 } = {}) {
   const errors = [];
-  await validatePublicDirectory(asPath(postsDirectory), errors);
+  const resolvedPostsDirectory = asPath(postsDirectory);
+  await validatePublicDirectory(resolvedPostsDirectory, errors);
+  await validateTranslationsDirectory(
+    translationsDirectoryFor(resolvedPostsDirectory),
+    resolvedPostsDirectory,
+    errors,
+  );
   if (errors.length > 0) {
     throw new ContentContractError(errors);
   }
@@ -498,6 +587,11 @@ export async function validateContent({
   const resolvedWorkspaceDirectory = asPath(workspaceDirectory);
 
   await validatePublicDirectory(resolvedPostsDirectory, errors);
+  await validateTranslationsDirectory(
+    translationsDirectoryFor(resolvedPostsDirectory),
+    resolvedPostsDirectory,
+    errors,
+  );
   if (!publicOnly) {
     await assertWorkspaceIsPrivate(
       resolvedPostsDirectory,

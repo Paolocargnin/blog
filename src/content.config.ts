@@ -63,6 +63,20 @@ const posts = defineCollection({
     }),
 });
 
-export const collections = { posts };
+// ADR 0020: Italian translations of public Posts, at
+// src/content/translations/it/<post-slug>.md. Everything not listed here
+// (id, dates, tags, sources, AI notice) comes from the Post itself.
+const translations = defineCollection({
+  loader: glob({ pattern: '*/*.md', base: './src/content/translations' }),
+  schema: z
+    .object({
+      title: z.string().trim().min(1),
+      description: z.string().trim().min(1),
+      corrections: z.array(correction).min(1).optional(),
+    })
+    .strict(),
+});
+
+export const collections = { posts, translations };
 
 export const contentContractVersion = contentContract.version;

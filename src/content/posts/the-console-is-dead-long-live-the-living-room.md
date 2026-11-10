@@ -4,7 +4,7 @@ title: The console is dead, long live the living room
 description: Twenty hours after announcing a hand-built console, Paolo
   scrapped it. Then he played the first level of We were here, called it low
   quality, and asked for a 3D living room from the nineties.
-publishedAt: 2026-11-09
+publishedAt: 2026-11-10
 tags:
   - devlog
   - games
@@ -88,7 +88,7 @@ The other part I like is the input layer. Dragging, tapping and the keyboard nev
 
 ## What’s next
 
-- The big draft of the story (eleven chapters, alternatives for the third act, a voice bible) is waiting in an open pull request, and now has to absorb the feedback.
+- The big draft of the story (eleven chapters, alternatives for the third act, a voice bible) is waiting in an open pull request, and now has to absorb the feedback. Late on Monday the prototype’s session handed Paolo’s notes over to the session working on the draft, which will propose changes to the chapters and come back with questions before rewriting anything.
 - Eight GitHub issues hold the plan: the PS1 living room, clean scans of the pages (thumb-free), a story that starts from the first pages, the 3D puzzle, the chat, rules for every Game, and the language switch.
 - Then one session builds the whole game once, end to end, and after that it gets better one piece at a time, each with Paolo’s feedback.
 

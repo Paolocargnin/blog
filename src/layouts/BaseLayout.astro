@@ -1,15 +1,30 @@
 ---
 import '@fontsource-variable/jetbrains-mono';
 
+interface Alternate {
+  hreflang: string;
+  href: string;
+}
+
 interface Props {
+  alternates?: Alternate[];
   description?: string;
+  lang?: 'en' | 'it';
   pageType?: 'article' | 'website';
   publishedAt?: Date;
   title: string;
   updatedAt?: Date;
 }
 
-const { description, pageType = 'website', publishedAt, title, updatedAt } = Astro.props;
+const {
+  alternates = [],
+  description,
+  lang = 'en',
+  pageType = 'website',
+  publishedAt,
+  title,
+  updatedAt,
+} = Astro.props;
 const siteName = 'PC - the blog';
 const documentTitle = title === siteName ? siteName : `${title} · ${siteName}`;
 const canonicalUrl = new URL(
@@ -33,6 +48,7 @@ const structuredData =
         datePublished: publishedAt?.toISOString(),
         description,
         headline: title,
+        inLanguage: lang,
         mainEntityOfPage: canonicalUrl,
         url: canonicalUrl,
       }
@@ -54,7 +70,7 @@ const structuredData =
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -62,6 +78,15 @@ const structuredData =
     {description && <meta name="description" content={description} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
+    {
+      alternates.map((alternate) => (
+        <link
+          rel="alternate"
+          hreflang={alternate.hreflang}
+          href={new URL(alternate.href, Astro.site ?? 'https://pctb.it').href}
+        />
+      ))
+    }
     <link rel="alternate" type="application/rss+xml" title={`${siteName} RSS feed`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:site_name" content={siteName} />
